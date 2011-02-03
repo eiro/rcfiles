@@ -1,0 +1,211 @@
+" vim: fdm=marker
+" uncomment to run vim in verbose mode:
+" set debug=msg
+
+" :nnoremap ,d :redir > /tmp/U.git.diff<cr>:r!git diff <cfile><cr>:redir end
+
+
+nnoremap _t 
+    \:let g:fakexpstore=@"<cr>
+    \xp
+    \:let @"=fakexpstore<cr> 
+
+nnoremap K :Man <cword><cr>
+
+" recent/experimental additions {{{
+
+" pour les buffermenues
+
+" hi CursorLine ctermfg=white ctermbg=red
+
+" nnoremap ,K :exec 'Man '.expand('<cfile>')<cr>
+" shell programming 
+" set isfname-==
+" command -nargs=* SyntaxIdEcho echo synIDattr(synID(line("."), col("."), 1), "name")
+" command -nargs=* GIT echo system('git '.<q-args>)
+
+" go to a file offset
+" :Offset 0xff goes to the 225th char of the file
+" command -nargs=1 Offset exec <args>."go"
+
+" }}}
+" simulate $ZSHDOTDIR {{{
+" if $VIMDOTDIR is set, replace $HOME by $VIMDOTDIR in the &ftp
+
+" VIMDOTDIR simulate $ZSHDOTDIR 
+if $VIMDOTDIR != ''
+    let &rtp=substitute( &rtp, '\v(^|,)'.$HOME, '\1'.$VIMDOTDIR , 'g' )
+endif
+" VIMRTP prepend to &rtp
+if $VIMRTP != ''
+    let &rtp=$VIMRTP.','.&rtp
+endif
+
+" }}}
+" General settings {{{
+" :h 'lz' for help on lz
+" and so on ...
+" as summary, my vim is 
+" (nocp) not compatible with vi 
+" (vb)  don't beep (screen flash instead)
+" (lz)  don't refresh when busy with macros
+" (hid) don't abandon buffers 
+" (ai)  autoindent
+" (lbr) don't wrap in a middle of a word
+" (so)  cursor try to stay at the middle of the screen
+" (ul)  you can undo ... x times 
+" (wim) command line completion show you a list 
+"       and let you decide
+" (ff)  gain 1 octet by line ;)
+" (ml)  honor modlines (vim: configuration in the current file)
+set nocp vb lz ai lbr ml hid 
+set sw=4 ul=1000 wim=longest,list so=999 ff=unix dy=uhex
+" (is)  next match for the RE you're typing
+" (hls) all matches of the last RE
+set hls is
+
+" no timeout for mapping sequences
+set notimeout nottimeout 
+" always want status bar
+set laststatus=2
+" you see line numbers. toggle it with ,n
+set spf=~/.vim/spell/mine.latin1.add
+set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](x=%04l,vx=%04v)
+set dictionary+=~/.vim/dicos/tt2,~/.vim/dicos/html
+
+" TODO: read :h matchit-install ? something more powerfull now ? 
+run macros/matchit.vim
+syn on
+filetype on
+filetype indent plugin on
+
+command -nargs=* Koha call Koha(<f-args>)
+
+function Koha(version)
+    exec 'set path+=/home/koha/versions/'. a:version 
+		\ .' tags+=/home/koha/versions/' . a:version . '/TAGS'
+    set isk+=. dict+=~/.vim/dict/kohadb
+    nnoremap ,to :sp ~/doc/koha_schema<cr>
+    nnoremap ,ts :!grep <cword> ~/doc/koha_schema<cr>
+    nnoremap ,tr :r!grep <cword> ~/doc/koha_schema<cr>
+endfunction
+
+if has("digraphs") && has("digraphs")
+    digraphs .3 8230
+endif
+
+
+" :Tohtml use CSS  
+let html_use_css='yes'
+" }}}
+" GUI and windows settings {{{
+" TODO: search and destroy ? 
+let g:WINDOWSVERSION = 0
+for windowsversion in [ 'win16' , 'win32' , 'win64' , 'win95' , 'win32unix' ]
+	if has(windowsversion)
+		let g:WINDOWSVERSION = windowsversion
+		break
+	endif
+endfor
+if g:WINDOWSVERSION 
+  " alt keys are also used by vim
+  set wak=yes
+  map <silent> <m-space> <esc>c>:simalt ~<cr>>
+else
+  run ftplugin/man.vim
+  set wak=no
+endif
+if has("gui_running")
+  set go=agrLt
+  colorscheme elflord
+  " colorscheme darkblue
+  " go=MAac seems to be good on windows
+  if has("gui_win32")
+      set guifont=Lucida_Console:h10:cANSI
+  else 
+      set guifont=Monospace\ 13
+  endif
+else
+  " elflord and evening are cool too ! 
+  colorscheme darkblue
+  " colorscheme ron
+  set background=light
+endif
+" }}}
+" recommended by cmd_mp.vim {{{
+set aw
+nnoremap ,c :make<cr>
+" }}}
+" programmers {{{
+let mapleader='('
+" }}}
+" what time is it ? {{{
+inoremap !now <c-r>=strftime("%d %Y %B (%T)")<cr>
+inoremap !today <c-r>=strftime("%B %d %Y")<cr>
+" bindzone serial
+inoremap !BZS <c-r>=strftime("%Y%m%d")<cr>
+" }}}
+" REMOVE? tabulations et indentations {{{
+" configurée comme suit apres lecture attentive de la doc.
+" set noexpandtab
+" set softtabstop=4
+" set shiftwidth=4
+"}}}
+" personnal filetypes {{{
+au BufNewFile *.xsl 0r~/.vim/templates/xsl.xsl
+" au BufNewFile *.bb 0r~/.vim/templates/busybox.bb
+au BufNewFile *.pl,*.t 0r~/.vim/templates/perl.pl | norm G
+au BufNewFile *.pm 0r~/.vim/templates/perl.pm 
+au BufRead slapd.conf setf slapd
+au BufRead *.go setf go
+au BufRead *.ferm,*ferm.conf setf ferm
+au BufNewFile,BufRead */itsalltext/wiki.* setf dokuwiki
+
+au BufNewFile,BufRead *mutt/* if ! &ft | set ft=muttrc | endif
+au BufNewFile,BufRead *.tt2.*,tt2.*,*.tt2 runtime macros/tt2.vim
+au BufNewFile,BufRead *.tt2html
+			\ set ft=html |
+			\ runtime macros/tt2.vim
+au BufNewFile *.html 0r~/.vim/templates/xhtml.html
+au BufRead psql.edit* setf sql
+let A="taupe"
+au StdinReadPre * let G="pouet"
+
+" au BufNewFile *.c 0r~/.vim/templates/c.c |
+" 	    \ %s/_DATE_/\=strftime("%d %Y %B (%T)")/
+
+au BufNewFile,BufRead,StdinReadPost *
+	    \ if getline(1) =~ '^diff\s\+--diff\>' | setf diff | endif
+
+" }}}
+" autocommands {{{
+au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dict/'.&ft.'/*'
+" }}}
+" some diff tools {{{
+" command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+" command WriteDiff w | !diff % %.bckp > %.diff
+" 
+" set backup pm=.bckp
+" "function WriteDiff ()
+"     let s:filenew= expand('%')
+"     let s:fileold= s:filenew . &pm
+"     let s:srr = &srr 
+"     execute "set srr=>".s:filenew.".diff"
+"     echoerr &srr
+"     execute '!diff '. s:filenew .' '. s:fileold
+"     " set srr=s:srr
+" endfunction
+"
+" sync two diff views. (as i don''t know how to configure ...)
+" nnoremap ,l :let g:goodLine=line('.')<cr><c-w><c-w>:call cursor(g:goodLine,0)<cr>
+" }}}
+
+" lovely long parentheses indent in C too :)
+set cino=(s,m1 
+
+function FoldParagraph ()
+    " pompé de :h foldexp
+    return getline(v:lnum)=~'^\s*$'&&getline(v:lnum+1)=~'\S'?'<1':1
+endfunction
+
+" colorscheme morning

@@ -1,0 +1,1 @@
+/home/mc/src/slides.vim/plugin/slides.vim
