@@ -70,7 +70,7 @@ set notimeout nottimeout
 set laststatus=2
 " you see line numbers. toggle it with ,n
 set spf=~/.vim/spell/mine.latin1.add
-set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](x=%04l,vx=%04v)
+set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](y=%04l,vx=%04v)
 set dictionary+=~/.vim/dicos/tt2,~/.vim/dicos/html
 
 " TODO: read :h matchit-install ? something more powerfull now ? 
