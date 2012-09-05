@@ -1,0 +1,43 @@
+# vim: ft=zsh sw=4
+
+setopt histignorealldups interactivecomments promptcr 
+export PS1="[%T] %n@%M%b:%d
+> "
+
+alias U='vim -'
+alias cc='gcc -pedantic -Wall -Werror -std=c99'
+ff () { find "$@" -type f }
+
+ssl_get_cert () {
+    :| openssl s_client -connect $1:${2:-993} 2>/dev/null |
+	sed -n '/BEGIN/,/END/p'
+}
+
+for f ( $~glob_zshrc_files ) source $f
+
+autoload compinit
+compinit -d ~/.compdump.$USER
+compdef _man superman
+
+title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
+
+: ~/todo/list(Ne:'
+    title today tasks
+    sed "/^$/q" $REPLY
+':)
+
+entitle () {
+    local title=$1;
+    shift;
+    local content="$( "$@" 2>/dev/null )"
+    [[ -n $content ]] || return
+    title $title
+    print $content
+}
+
+shush which tmux && {
+    entitle "tmux sessions" tmux ls 
+    # title tmux sessions
+    # tmux list-sessions
+}
+

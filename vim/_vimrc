@@ -2,15 +2,86 @@
 " uncomment to run vim in verbose mode:
 " set debug=msg
 
-" :nnoremap ,d :redir > /tmp/U.git.diff<cr>:r!git diff <cfile><cr>:redir end
 
+" TODO {{{
+" * get Align.vim (or better?)
+" * perlcli ? 
+" }}}
+" Why not ? {{{
+" xml/html editors: sparkup
+" seems that ctrlp is better than command-t
+" }}}
 
-nnoremap _t 
-    \:let g:fakexpstore=@"<cr>
-    \xp
-    \:let @"=fakexpstore<cr> 
+set nocp rtp+=~/.vim/bundle/vundle
+filetype off
+call vundle#rc()
+Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'kien/ctrlp.vim'
+Bundle 'spolu/dwm.vim'
 
-nnoremap K :Man <cword><cr>
+filetype plugin indent on
+
+" works well with mp_cmd.vim
+set aw
+nnoremap ,c :make<cr>
+
+set et
+set listchars=tab:>- 
+nnoremap ,l :set list!<cr>
+
+fun MailDraft()
+    setf mail
+    MP mutt -H % <> /dev/null
+endf
+
+fun MailNew()
+    wincmd n
+    call MailDraft()
+endf
+
+fun MailTemplate()
+    let fmt = $HOME.'/.vim/mutt_drafts/%s'
+    let f = filter( map( [&ft,'default'], 'printf(fmt,v:val)' ) , 'filereadable(v:val)' )
+    if empty(f)
+        echoerr "no mutt draft available"
+        return
+    endif
+    exec "e ".tempname()
+    exec "0r ".f[0]
+    call MailDraft()
+    normal Go
+endf
+command -nargs=0 MailDraft  call MailDraft()
+command -nargs=0 MailNew    call MailNew()
+
+fun! Scratchpad(...)
+    let ft = get( filter( ["a:000[0]","&ft"], "exists(v:val)" ), 0)
+    if exists(ft) | exec "let ft = ".ft
+    else          | let ft = "default"
+    endif
+    exec "edit ~/.vim/scratchpad/".ft
+    " TODO:
+    " au BufNewFile .vim/scratchpad setf expand("%:t")
+    " would be smarter as you can reopen the scratchpad manually
+    exec "setf ".ft
+endf
+
+if v:version > 702
+    command -nargs=* -complete=filetype Scratchpad call Scratchpad(<f-args>)
+endif
+
+command -nargs=1 -complete=command Sh
+    \ | let g:ShPwd=getcwd()
+    \ | exec "cd ". <q-args> 
+    \ | exec "!zsh"
+    \ | exec "cd ".g:ShPwd
+
+" nnoremap K :Man <cword><cr>
+
+command -nargs=* Perldoc wincmd n | setf man
+    \| silent 0r!perldoc -t <args> || perldoc -t -f <args> 
 
 " recent/experimental additions {{{
 
@@ -58,42 +129,27 @@ endif
 "       and let you decide
 " (ff)  gain 1 octet by line ;)
 " (ml)  honor modlines (vim: configuration in the current file)
-set nocp vb lz ai lbr ml hid 
-set sw=4 ul=1000 wim=longest,list so=999 ff=unix dy=uhex
 " (is)  next match for the RE you're typing
 " (hls) all matches of the last RE
-set hls is
+
+set nocp vb lz ai lbr ml hid hls is
+set sw=4 ul=1000 wim=longest,list so=999 ff=unix dy=uhex
 
 " no timeout for mapping sequences
 set notimeout nottimeout 
 " always want status bar
 set laststatus=2
-" you see line numbers. toggle it with ,n
 set spf=~/.vim/spell/mine.latin1.add
 set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](y=%04l,vx=%04v)
-set dictionary+=~/.vim/dicos/tt2,~/.vim/dicos/html
+set dictionary+=~/.vim/dicts/tt2,~/.vim/dicts/html
 
-" TODO: read :h matchit-install ? something more powerfull now ? 
-run macros/matchit.vim
 syn on
 filetype on
 filetype indent plugin on
 
-command -nargs=* Koha call Koha(<f-args>)
-
-function Koha(version)
-    exec 'set path+=/home/koha/versions/'. a:version 
-		\ .' tags+=/home/koha/versions/' . a:version . '/TAGS'
-    set isk+=. dict+=~/.vim/dict/kohadb
-    nnoremap ,to :sp ~/doc/koha_schema<cr>
-    nnoremap ,ts :!grep <cword> ~/doc/koha_schema<cr>
-    nnoremap ,tr :r!grep <cword> ~/doc/koha_schema<cr>
-endfunction
-
-if has("digraphs") && has("digraphs")
+if has("digraphs")
     digraphs .3 8230
 endif
-
 
 " :Tohtml use CSS  
 let html_use_css='yes'
@@ -127,9 +183,9 @@ if has("gui_running")
   endif
 else
   " elflord and evening are cool too ! 
-  colorscheme darkblue
   " colorscheme ron
-  set background=light
+  " colorscheme darkblue
+  " set background=light
 endif
 " }}}
 " recommended by cmd_mp.vim {{{
@@ -158,6 +214,7 @@ au BufNewFile *.pl,*.t 0r~/.vim/templates/perl.pl | norm G
 au BufNewFile *.pm 0r~/.vim/templates/perl.pm 
 au BufRead slapd.conf setf slapd
 au BufRead *.go setf go
+au BufRead *.psgi setf perl
 au BufRead *.ferm,*ferm.conf setf ferm
 au BufNewFile,BufRead */itsalltext/wiki.* setf dokuwiki
 
@@ -166,7 +223,8 @@ au BufNewFile,BufRead *.tt2.*,tt2.*,*.tt2 runtime macros/tt2.vim
 au BufNewFile,BufRead *.tt2html
 			\ set ft=html |
 			\ runtime macros/tt2.vim
-au BufNewFile *.html 0r~/.vim/templates/xhtml.html
+au BufNewFile *.html 0r ~/.vim/templates/html5.html
+
 au BufRead psql.edit* setf sql
 let A="taupe"
 au StdinReadPre * let G="pouet"
@@ -179,7 +237,8 @@ au BufNewFile,BufRead,StdinReadPost *
 
 " }}}
 " autocommands {{{
-au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dict/'.&ft.'/*'
+au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dicts/'.&ft.'/*'
+au BufNewFile,BufRead Vagrantfile setf ruby
 " }}}
 " some diff tools {{{
 " command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
@@ -201,11 +260,48 @@ au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dict/'.&ft.'/*'
 " }}}
 
 " lovely long parentheses indent in C too :)
-set cino=(s,m1 
+set cino=(s,m1
 
 function FoldParagraph ()
     " pompé de :h foldexp
     return getline(v:lnum)=~'^\s*$'&&getline(v:lnum+1)=~'\S'?'<1':1
 endfunction
 
+fu! NewFoldWhenLineMatches( lineMatches )
+
+  if getline( v:lnum ) =~ '\v^\s*(#|$)'
+    return '='
+  endif
+
+  if getline( v:lnum ) =~ a:lineMatches
+    return 'a1'
+  elseif getline( v:lnum + 1 ) =~ a:lineMatches 
+    return 's1'
+  endif
+
+  return '='
+endfu
 " colorscheme morning
+
+vm   ,tos y<c-w>nP
+nmap ,sc  1GVG,tos
+
+fun! NewFilter ( alias, filter )
+    " filter inplace
+    exec "nmap ,i" . a:alias . "  :%!"    . a:filter . "<cr>"
+    exec "vm   ,i" . a:alias . "  :!"     . a:filter . "<cr>"
+    " filter in new split
+    exec "nmap ,s" . a:alias . "  ,sc,i"  . a:alias . ""
+    exec "vm   ,s" . a:alias . "  ,tos,i" . a:alias . ""
+    " copy and filter
+    exec "vm   ,c" . a:alias . "  yPgv,i" . a:alias . ""
+endf
+call NewFilter('Z','zsh')
+call NewFilter('P','perl')
+call NewFilter('T','textile')
+
+" debian see
+nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
+
+
+

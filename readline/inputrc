@@ -1,0 +1,45 @@
+# use a visible bell if one is available
+set bell-style visible
+
+# vi style editing
+set keymap vi
+set editing-mode vi
+
+# don't strip characters to 7 bits when reading
+set input-meta on
+
+# allow iso-latin1 characters to be inserted rather
+# than converted to prefix-meta sequences
+set convert-meta off
+
+# display characters with the eighth bit set directly
+# rather than as meta-prefixed characters
+set output-meta on
+
+# if there are more than 150 possible completions for
+# a word, ask the user if he wants to see all of them
+set completion-query-items 150
+
+
+# paris autoclose {{{
+# for exemple, typing  (( will write (|)
+# where | is the next cursor position
+# to actualy write ((, (^v( 
+
+"''":"\C-v'\C-v'\ei"
+"((":"\C-v(\C-v)\ei"
+"[[":"\C-v[\C-v]\ei"
+"{{":"\C-v{\C-v}\ei"
+"\"\"":"\C-v\"\C-v\"\ei"
+# }}}
+
+$if mysql 
+$include /home/mc/local/etc/readline/sql_abbr
+"DE ": "describe " 
+";;": "\\G\n"
+";fp": "flush privileges; " 
+";sd": "show databases; " 
+";st": "show tables; " 
+"!st": "show tables;;" 
+$endif
+

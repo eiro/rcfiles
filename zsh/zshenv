@@ -1,0 +1,118 @@
+# vim: sw=4 fdm=marker
+
+# basic settings {{{
+setopt warncreateglobal nounset extendedglob braceccl
+export EMAIL=khatar@phear.org # used by some tools (debian devscripts, mutt, ...)
+export EDITOR=vim
+export PAGER=less
+export ZSHDOT=~/local/etc/zsh
+export LC_ALL=en_US.UTF-8
+# }}}
+# basic functions {{{
+shush1   () { "$@" 1> /dev/null }
+shush2   () { "$@" 2> /dev/null }
+shush    () { "$@" &> /dev/null }
+warn     () { print -u2 "$@" }
+failed   () { warn "$@"; false }
+die      () {
+    local e=$?
+    warn $*
+    exit $e
+}
+# }}}
+# helpers {{{
+new_place () {
+    local var=$1 dir=$2 exists
+    eval "(( \$+$var )) || {
+        [[ -d \"$dir\" ]] && export $var=\"$dir\"
+        [[ -d \"$dir/bin\" ]] && path+=\"$dir/bin\" 
+    }"
+}
+bang () {
+    local cmd=$1 shell=$2 script=$3
+    [[ -f $script ]] || return
+    shift 3 # i'll use $* 
+    eval "$cmd () { $shell $script $*" '"$@" }'
+}
+# }}}
+# new_place GROOVY_HOME  ~/local/opt/groovy-1.8.6
+# clojure {{{
+# new_place CLOJURE_HOME ~/local/opt/clojure-1.4.0
+# : /etc/profile.d/clojure.sh('Ne:source $REPLY:')
+# }}}
+# ruby {{{
+path+=($HOME/.rvm/bin) 
+new_place GEM_HOME     ~/local/lib/gems
+# }}}
+# perl5 {{{
+hash -d p5=~/src/perl/5/lib
+export -UT PERL5LIB perl5lib
+
+p5_reload_lib () {
+    perl5lib=( lib ~p5/*/lib(N) $perl5lib )
+    path=( ~p5/*/{bin,script{,s}}(N) $path )
+}
+p5_reload_lib
+
+p5_load_local_lib () { eval $( perl -Mlocal::lib ) }
+
+# }}}
+# perl6 {{{
+hash -d p6=~/src/perl/6/lib
+export -UT PERL6LIB perl6lib
+path+=( ~/local/rakudo-star-2012.07/install/bin )
+
+p6_reload_lib () {
+    perl6lib=( lib ~p6/*/lib(N) $perl6lib )
+    path=( ~p6/*/{bin,script{,s}}(N) $path )
+}
+p6_reload_lib 
+# }}}
+# extra tools {{{
+ylint      () { perl -MYAML -e 'print Dump YAML::LoadFile("'"$1"'")' }
+textile    () { perl -MText::Textile=textile -0 -e 'print textile <>' }
+html_prove () { prove -m -Q --formatter=TAP::Formatter::HTML "$@" }
+y2js       () { perl -MYAML -MJSON -0 -e "print(encode_json(YAML::Load(<>)))" }
+js2y       () { perl -MYAML -MJSON -0 -e "print(YAML::Dump(decode_json(<>)))" }
+ssh_fp () {
+    local host=$1 port=$2
+    lsof -i:$port &> /dev/null || ssh -fNL ${port}:localhost:${port} $host
+}
+# }}}
+# aliases {{{
+# if latex is used in a script, don't fallback in interactive mode
+alias cc='gcc -pedantic -Wall -Werror -std=c99'
+alias l='ls'
+alias g=git
+alias nslatex='latex -interaction=nonstopmode'
+ff () { find "$@" -type f }
+fu () { ff *|U }
+alias U='vim -'
+# }}}
+
+[[ -e ~/local/jar/ditaa0_9.jar ]] && ditaa () {
+    java -jar ~/local/jar/ditaa0_9.jar "$@"
+}
+
+path=(
+    ~/bin(/N)
+    ~/.cabal/bin(/N)
+    /usr/local/bin(/N)
+    ~p5/*/{bin,script}(N)
+    ~/local/opt/rakudo-star-2012.05/install/bin
+    # $GEM_HOME/bin(N)
+    $path
+)
+
+bang gfv perl ~p5/get-flash-videos/get_flash_videos
+glob_zshenv_files="$ZSHDOT/env/*.zsh(N)"
+glob_zshrc_files="$ZSHDOT/rc/*.zsh(N)"
+for f ( $~glob_zshenv_files ) source $f
+fpath+=$ZSHDOT/lib
+vrd () { local f=$1; shift; vimdiff scp://$^@/$f $f  }
+clean_basename () { print "${${${${*//[^._a-zA-Z0-9-]##/_}}%_}#_}" }
+note () {
+    local note=~/doc/notes/$( clean_basename "$*" )
+    print "$*" > $note
+    ${EDITOR:-vim} 
+}
