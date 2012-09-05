@@ -18,7 +18,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'kien/ctrlp.vim'
+" Bundle 'kien/ctrlp.vim' " this ruins previous!
 Bundle 'spolu/dwm.vim'
 
 filetype plugin indent on
