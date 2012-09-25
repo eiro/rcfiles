@@ -13,15 +13,21 @@
 " }}}
 
 set nocp rtp+=~/.vim/bundle/vundle
+
+
+" filetype plugin indent on
+" now replaced by Bundle configuration, so 
 filetype off
+" but i really need MP perl :(
+
 call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Lokaltog/vim-easymotion'
+Bundle 'tpope/vim-fugitive'
+Bundle 'eiro/vim-perl'
 " Bundle 'kien/ctrlp.vim' " this ruins previous!
-Bundle 'spolu/dwm.vim'
-
-filetype plugin indent on
+" Bundle 'spolu/dwm.vim'
 
 " works well with mp_cmd.vim
 set aw
@@ -303,5 +309,4 @@ call NewFilter('T','textile')
 " debian see
 nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
 
-
-
+nnoremap ,m :%w !sendmail -t<cr>
