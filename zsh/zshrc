@@ -1,6 +1,7 @@
 # vim: ft=zsh sw=4
 
-setopt histignorealldups interactivecomments promptcr 
+setopt histignorealldups interactivecomments promptcr
+hash -d m=~/src/perl/5/lib 
 export PS1="[%T] %n@%M%b:%d
 > "
 
@@ -13,11 +14,16 @@ ssl_get_cert () {
 	sed -n '/BEGIN/,/END/p'
 }
 
-for f ( $~glob_zshrc_files ) source $f
-
-autoload compinit
-compinit -d ~/.compdump.$USER
-compdef _man superman
+precmd () {
+    local gitwhere=$( shush2 git symbolic-ref HEAD)
+    [[ -n $gitwhere ]] || gitwhere=$( shush2 git describe)
+    [[ -n $gitwhere ]] && {
+        local modif=`git status -s|wc -l`
+        [[ $modif == 0 ]] && modif="" || modif="($modif files modified)"
+        gitwhere="[${gitwhere##*/}$modif]"
+    }
+    export PS1="[%T] %n@%M%b:%~ $gitwhere"$'\n'"> "
+}
 
 title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
 
@@ -41,3 +47,5 @@ shush which tmux && {
     # tmux list-sessions
 }
 
+for f ( $~glob_zshrc_files ) source $f
+compdef _man superman
