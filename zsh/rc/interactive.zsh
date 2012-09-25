@@ -48,6 +48,6 @@ bindkey '^ec' _complete_help
 compdef _gnu_generic ctags
 compdef _gnu_generic zenity
 compdef _gnu_generic source-highlight
-compdef 'compadd ~/local/etc/mutt/accounts/*(:r:t)' box
+compdef 'compadd ~/.mutt/accounts/*(:r:t)' box
 
 autoload -U zed
