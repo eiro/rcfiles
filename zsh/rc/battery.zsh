@@ -1,4 +1,5 @@
-if { which acpi > /dev/null && ${ON_A_LAPTOP=-false} } {
+(( $+ON_A_LAPTOP )) || ON_A_LAPTOP=false
+if { which acpi > /dev/null && $ON_A_LAPTOP } {
 	battery_state () {
 		#battery 0: charging, 15%, 00:02:33 until charged
 		#battery 0: discharging, 16%, 00:00:42 remaining

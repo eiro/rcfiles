@@ -9,16 +9,11 @@ alias U='vim -'
 alias cc='gcc -pedantic -Wall -Werror -std=c99'
 ff () { find "$@" -type f }
 
-ssl_get_cert () {
-    :| openssl s_client -connect $1:${2:-993} 2>/dev/null |
-	sed -n '/BEGIN/,/END/p'
-}
-
 precmd () {
     local gitwhere=$( shush2 git symbolic-ref HEAD)
     [[ -n $gitwhere ]] || gitwhere=$( shush2 git describe)
     [[ -n $gitwhere ]] && {
-        local modif=`git status -s|wc -l`
+        local modif="$( shush2 git status -s |wc -l )"
         [[ $modif == 0 ]] && modif="" || modif="($modif files modified)"
         gitwhere="[${gitwhere##*/}$modif]"
     }
@@ -26,11 +21,6 @@ precmd () {
 }
 
 title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
-
-: ~/todo/list(Ne:'
-    title today tasks
-    sed "/^$/q" $REPLY
-':)
 
 entitle () {
     local title=$1;
@@ -41,11 +31,32 @@ entitle () {
     print $content
 }
 
-shush which tmux && {
-    entitle "tmux sessions" tmux ls 
-    # title tmux sessions
-    # tmux list-sessions
+: ~/todo/today(Ne:'
+    title today tasks
+    print daily setup
+    sed "10q;/^$/q" $REPLY
+    print daily report
+':)
+
+i_have tmux && entitle "tmux sessions" tmux ls 
+
+i_setup_my_day () {
+    ( cd ~/todo
+        git add today
+        git ci -m "starting $( date +%F )" )
+}
+
+i_made_my_day () {
+    ( cd ~/todo
+        git add today
+        git ci -m "reporting $( date +%F )" )
 }
 
 for f ( $~glob_zshrc_files ) source $f
+
 compdef _man superman
+vsympaql () { ssh -h home vsympaql }
+
+alias vt='( cd ~/todo; vim today)'
+
+

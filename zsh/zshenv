@@ -5,9 +5,10 @@ setopt warncreateglobal nounset extendedglob braceccl
 export EMAIL=khatar@phear.org # used by some tools (debian devscripts, mutt, ...)
 export EDITOR=vim
 export PAGER=less
+export LC_ALL=en_US.utf8 # locale -a to list available 
 export ZSHDOT=~/local/etc/zsh
-export LC_ALL=en_US.UTF-8
-export ON_A_LAPTOP=false
+glob_zshenv_files="$ZSHDOT/env/*.zsh(N)"
+glob_zshrc_files="$ZSHDOT/rc/*.zsh(N)"
 # }}}
 # basic functions {{{
 shush1   () { "$@" 1> /dev/null }
@@ -20,31 +21,59 @@ die      () {
     warn $*
     exit $e
 }
+
+i_have () {
+    local e
+    for e { shush which $e || return }
+}
+
+fill () {
+    local garbage
+    IFS=$'\n' read -d '' "$@" garbage
+}
+
+slurp () { IFS=$'\n' read -d '' -A $1 }
 # }}}
 # helpers {{{
+
 new_place () {
     local var=$1 dir=$2 exists
-    eval "(( \$+$var )) || {
-        [[ -d \"$dir\" ]] && export $var=\"$dir\"
-        [[ -d \"$dir/bin\" ]] && path+=\"$dir/bin\" 
-    }"
+    eval "(( \$+$var ))" && return
+    [[ -d $dir ]] || return
+    eval "export $var=${(qqq)dir}"
+    [[ -d $dir/bin ]] && path+=$dir/bin
+    true
 }
+
 bang () {
     local cmd=$1 shell=$2 script=$3
     [[ -f $script ]] || return
     shift 3 # i'll use $* 
     eval "$cmd () { $shell $script $*" '"$@" }'
 }
+
+i_have java && {
+    if (( $+classpath )) {
+        failed "classpath exists"
+    } else {
+        export -UT CLASSPATH classpath
+    }
+}
+
 # }}}
-# new_place GROOVY_HOME  ~/local/opt/groovy-1.8.6
-# clojure {{{
-# new_place CLOJURE_HOME ~/local/opt/clojure-1.4.0
-# : /etc/profile.d/clojure.sh('Ne:source $REPLY:')
-# }}}
-# ruby {{{
-path+=($HOME/.rvm/bin) 
-new_place GEM_HOME     ~/local/lib/gems
-# }}}
+# setting env for various programs {{{
+new_place GOROOT ~/local/opt/vendor/go
+new_place GROOVY_HOME ~/local/opt/groovy-1.8.6
+
+for f (~/local/opt/clojure-1.4.0) {
+    new_place CLOJURE_HOME $f
+    classpath+=$f/clojure.jar
+}
+: /etc/profile.d/clojure.sh('Ne:source $REPLY:') # arch linux, for example
+
+[[ -d ~/.rvm ]] && path+=($HOME/.rvm/bin )
+new_place GEM_HOME ~/local/lib/gems
+
 # perl5 {{{
 hash -d p5=~/src/perl/5/lib
 export -UT PERL5LIB perl5lib
@@ -61,13 +90,15 @@ p5_load_local_lib () { eval $( perl -Mlocal::lib ) }
 # perl6 {{{
 hash -d p6=~/src/perl/6/lib
 export -UT PERL6LIB perl6lib
-path+=( ~/local/rakudo-star-2012.07/install/bin )
+: /opt/rakudo/zshenv('Ne:source $REPLY:')
+# path+=( ~/local/rakudo-star-2012.07/install/bin )
 
 p6_reload_lib () {
     perl6lib=( lib ~p6/*/lib(N) $perl6lib )
     path=( ~p6/*/{bin,script{,s}}(N) $path )
 }
 p6_reload_lib 
+# }}}
 # }}}
 # extra tools {{{
 ylint      () { perl -MYAML -e 'print Dump YAML::LoadFile("'"$1"'")' }
@@ -95,20 +126,19 @@ alias U='vim -'
     java -jar ~/local/jar/ditaa0_9.jar "$@"
 }
 
+export GEM_HOME=$HOME/local/lib/gems
 path=(
     ~/bin(/N)
+    ~/local/vendor/bin(/N)
     ~/.cabal/bin(/N)
     /usr/local/bin(/N)
-    ~p5/*/{bin,script}(N)
-    ~/local/opt/rakudo-star-2012.05/install/bin
+    ~p5/*/{bin,script}(/N)
+    ~/src/got/bin(N)
     # $GEM_HOME/bin(N)
     $path
 )
 
 bang gfv perl ~p5/get-flash-videos/get_flash_videos
-glob_zshenv_files="$ZSHDOT/env/*.zsh(N)"
-glob_zshrc_files="$ZSHDOT/rc/*.zsh(N)"
-for f ( $~glob_zshenv_files ) source $f
 fpath+=$ZSHDOT/lib
 vrd () { local f=$1; shift; vimdiff scp://$^@/$f $f  }
 clean_basename () { print "${${${${*//[^._a-zA-Z0-9-]##/_}}%_}#_}" }
@@ -117,3 +147,89 @@ note () {
     print "$*" > $note
     ${EDITOR:-vim} 
 }
+
+nullmutt () { mutt "$@" <> /dev/null }
+nullbox  () { nullmutt -F ~/.mutt/accounts/$1 ${argv[2,-1]} }
+visql () { vim -c 'setf sql' -c 'set nowrap' "$@" }
+
+sympaql () {
+    ssh -t home visql
+}
+
+uds_fmt         () { cat ~/.uds/fmt/$1         }
+uds_printf      () { printf "$(< ~/.uds/fmt/$argv[1] )" $argv[2,-1] }
+uds_credentials () { cat ~/.uds/credentials/$1 }
+
+luds_as () {
+    local login passwd dn
+    uds_credentials $1 | fill login passwd
+    dn=$( uds_printf ldap/binddn $login )
+    print -l $dn $passwd
+}
+
+luds_ldapvi () {
+    local host=$2 dn passwd 
+    luds_as $1 | fill dn passwd
+    shift 2
+    ldapvi -h $host -D $dn -w $passwd "$@"
+}
+
+luds_edit  () { luds_ldapvi me amon "$@" }
+luds_query () { luds_ldapvi me ldaps://ldapuds.u-strasbg.fr --out "$@" }
+lumail () { luds_query mail=$1 $argv[2,-1] }
+luou   () { luds_query ou=$1 $argv[2,-1] }
+luds_pipe  () { while {read} { luds_query $REPLY } }
+
+sq/_usage () {
+    print "sq (sympa query)
+    sq sc listname
+        show the config stored on the server
+    sq canon listname
+        show the config stored on the server
+" }
+
+sq/canon       () { print ${(j:/:)${(Oa)${(s:@:)1}}} }
+sq/conf/path   () { print sympa/data/expl/$1/config }
+sq/conf/mpath  () { print sympa/data/expl/$( sq/canon $1 )/config }
+sq/conf       () { ssh baou "${(@qq)argv[2,-1]}" $( sq/conf/path  $1 ) } 
+sq/mconf      () { ssh baou "${(@qq)argv[2,-1]}" $( sq/conf/mpath $1 ) } 
+sq/tty () { ssh -t baou "${(qq)@}" }
+sq/vi  () { ssh -t baou vim $( sq/$1/path $2 ) }
+
+subcommands_of () {
+    local cmd=$1
+    shift
+    source <( print $cmd' () {
+        if (( $+1 )) { '$cmd'/$1 $argv[2,-1] } else { '$cmd'/_usage }
+        }' )
+}
+
+subcommands_of sq config
+ 
+sympavi () {
+    local login basedn
+    luds_as binddn me | fill dn passwd 
+}
+
+for f ( $~glob_zshenv_files ) source $f
+
+update_sympa_list () {
+    ssh baal 'cd /local/sympa/expl/unistra.fr; ls' > ~/.sympalists
+    print -l bot {delete,rename}_list {,etu.}unistra.fr >> ~/.sympalists
+}
+
+ssl_get_cert () {
+    :| openssl s_client -connect $1:${2:-993} 2>/dev/null |
+	sed -n '/BEGIN/,/END/p'
+}
+
+t () {
+    (( $+1 )) || {
+        tmux ls | sed 's/:.*//'
+        return
+    }
+    tmux att -t $1 ||
+        tmux new -s $1
+}
+
+

@@ -14,7 +14,6 @@
 
 set nocp rtp+=~/.vim/bundle/vundle
 
-
 " filetype plugin indent on
 " now replaced by Bundle configuration, so 
 filetype off
@@ -292,6 +291,13 @@ endfu
 vm   ,tos y<c-w>nP
 nmap ,sc  1GVG,tos
 
+iab cldt, cordialement,
+
+" todo:
+" - save current path
+" - do something like :Popd
+nnoremap ,zf :lcd <c-f><cr>:!zsh<cr>
+
 fun! NewFilter ( alias, filter )
     " filter inplace
     exec "nmap ,i" . a:alias . "  :%!"    . a:filter . "<cr>"
@@ -303,10 +309,16 @@ fun! NewFilter ( alias, filter )
     exec "vm   ,c" . a:alias . "  yPgv,i" . a:alias . ""
 endf
 call NewFilter('Z','zsh')
-call NewFilter('P','perl')
+call NewFilter('5','perl')
+call NewFilter('6','perl6')
 call NewFilter('T','textile')
+
+
 
 " debian see
 nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
 
-nnoremap ,m :%w !sendmail -t<cr>
+" #TODO: it would be nice if: 
+" - check this is a valid email template
+" - add utf8 compatibility
+"nnoremap ,m :%w !sendmail -t<cr> 

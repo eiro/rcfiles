@@ -4,7 +4,7 @@
 " in my .zshenv
 " type ,c in normal mode to know if you file is valid
 
-nnoremap ,c :!yamllint %<cr>
+nnoremap <buffer> ,c :!yamllint %<cr>
 
 " the common mistakes are 
 "
@@ -21,4 +21,4 @@ nnoremap ,c :!yamllint %<cr>
 " now you can type ,E in normal mode to walk through 
 " the common mistakes you wrote
 
-nnoremap ,E /\v:\S<bar>\[[^,]+\{<bar>^[^:]+;\s<bar>[]}]\s+$<cr>
+nnoremap <buffer> ,E /\v:\S<bar>\[[^,]+\{<bar>^[^:]+;\s<bar>[]}]\s+$<cr>
