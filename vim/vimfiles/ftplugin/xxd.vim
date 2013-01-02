@@ -1,3 +1,13 @@
+
+" <F2> to switch to byte/data
+nnoremap <F2> :call XXD_toogle_pos()<cr>
+
+" :D string search string in data (handle the \n)
+command! -nargs=+ D call XXD_DataSearch(<q-args>)
+
+" :B string search string in bytes (handle the \n)
+command! -nargs=+ B call XXD_ByteSearch(<q-args>)
+
 fun! XXD_toogle_pos ()
     let p = getpos('.')
     if     p[2] == 51 | let p[2] = 10
@@ -37,9 +47,6 @@ fun! XXD_toogle_pos ()
     call setpos('.',p)
 endfun
 
-command! -nargs=+ D call XXD_DataSearch(<q-args>)
-command! -nargs=+ B call XXD_ByteSearch(<q-args>)
-
 function! XXD_DataSearch (s)
     let chars = split( a:s ,'\zs')
     " '\v.{50}.*\zs' don't search in first cols
@@ -56,5 +63,3 @@ function! XXD_ByteSearch (s)
     let @/ = '\v'.join(chars, ignore).'\ze.{18}'
     call search(@/)
 endfunction
-
-nnoremap <F2> :call XXD_toogle_pos()<cr>
