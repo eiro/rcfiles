@@ -119,7 +119,7 @@ alias g=git
 alias nslatex='latex -interaction=nonstopmode'
 ff () { find "$@" -type f }
 fu () { ff *|U }
-alias U='vim -'
+U  () { vim "$@" - }
 # }}}
 
 [[ -e ~/local/jar/ditaa0_9.jar ]] && ditaa () {

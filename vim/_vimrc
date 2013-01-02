@@ -316,9 +316,24 @@ call NewFilter('T','textile')
 
 
 " debian see
-nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
+" nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
 
 " #TODO: it would be nice if: 
 " - check this is a valid email template
 " - add utf8 compatibility
 "nnoremap ,m :%w !sendmail -t<cr> 
+"
+"
+
+" vim -b : edit binary using xxd-format!
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
