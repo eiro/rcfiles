@@ -1,0 +1,3 @@
+gitconfig:
+    to: /home/mc/.gitconfig
+    with: { gh: { id: eiro, password: d3llice } }

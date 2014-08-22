@@ -1,65 +1,31 @@
-" vim: fdm=marker
-" uncomment to run vim in verbose mode:
+" vim: fdm=marker isk-==
+" because sometime you make mistakes:
 " set debug=msg
 
+set nocp
+set rtp+=~/.vim/pathogen
+call pathogen#infect()
 
-" TODO {{{
-" * get Align.vim (or better?)
-" * perlcli ? 
-" }}}
-" Why not ? {{{
-" xml/html editors: sparkup
-" seems that ctrlp is better than command-t
-" }}}
+" rtp is like zsh $path, update it ... 
+" set rtp+=~/.vim/bundle/dwm.vim
+" set rtp+=~/.vim/bundle/info.vim
+" set rtp+=~/.vim/bundle/rt-client
+" set rtp+=~/.vim/bundle/tslime.vim
+" set rtp+=~/.vim/bundle/vim-fugitive
+" set rtp+=~/.vim/bundle/vim-perl
+" set rtp+=~/.vim/bundle/airline
 
-set nocp rtp+=~/.vim/bundle/vundle
-
-" filetype plugin indent on
-" now replaced by Bundle configuration, so 
-filetype off
-" but i really need MP perl :(
-
-call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'tpope/vim-fugitive'
-Bundle 'eiro/vim-perl'
-" Bundle 'kien/ctrlp.vim' " this ruins previous!
-" Bundle 'spolu/dwm.vim'
-
-" works well with mp_cmd.vim
+" works well with mp_cmd.vim {{{
 set aw
-nnoremap ,c :make<cr>
+nnoremap ,x :make<cr>
+" }}}
 
+" i guess it was about python ? {{{
 set et
 set listchars=tab:>- 
 nnoremap ,l :set list!<cr>
+" }}}
 
-fun MailDraft()
-    setf mail
-    MP mutt -H % <> /dev/null
-endf
-
-fun MailNew()
-    wincmd n
-    call MailDraft()
-endf
-
-fun MailTemplate()
-    let fmt = $HOME.'/.vim/mutt_drafts/%s'
-    let f = filter( map( [&ft,'default'], 'printf(fmt,v:val)' ) , 'filereadable(v:val)' )
-    if empty(f)
-        echoerr "no mutt draft available"
-        return
-    endif
-    exec "e ".tempname()
-    exec "0r ".f[0]
-    call MailDraft()
-    normal Go
-endf
-command -nargs=0 MailDraft  call MailDraft()
-command -nargs=0 MailNew    call MailNew()
 
 fun! Scratchpad(...)
     let ft = get( filter( ["a:000[0]","&ft"], "exists(v:val)" ), 0)
@@ -71,22 +37,18 @@ fun! Scratchpad(...)
     " au BufNewFile .vim/scratchpad setf expand("%:t")
     " would be smarter as you can reopen the scratchpad manually
     exec "setf ".ft
-endf
-
-if v:version > 702
-    command -nargs=* -complete=filetype Scratchpad call Scratchpad(<f-args>)
-endif
+endf 
+command -nargs=* -complete=filetype Scratchpad call Scratchpad(<f-args>)
 
 command -nargs=1 -complete=command Sh
-    \ | let g:ShPwd=getcwd()
-    \ | exec "cd ". <q-args> 
-    \ | exec "!zsh"
-    \ | exec "cd ".g:ShPwd
+    \| let g:ShPwd=getcwd()
+    \| exec "cd ". <q-args> 
+    \| exec "!zsh"
+    \| exec "cd ".g:ShPwd
 
-" nnoremap K :Man <cword><cr>
-
-command -nargs=* Perldoc wincmd n | setf man
-    \| silent 0r!perldoc -t <args> || perldoc -t -f <args> 
+command -nargs=* Perldoc wincmd n 
+    \| setf man
+    \| silent 0r!perldoc -t <args> || perldoc -t -f <args>
 
 " recent/experimental additions {{{
 
@@ -99,23 +61,6 @@ command -nargs=* Perldoc wincmd n | setf man
 " set isfname-==
 " command -nargs=* SyntaxIdEcho echo synIDattr(synID(line("."), col("."), 1), "name")
 " command -nargs=* GIT echo system('git '.<q-args>)
-
-" go to a file offset
-" :Offset 0xff goes to the 225th char of the file
-" command -nargs=1 Offset exec <args>."go"
-
-" }}}
-" simulate $ZSHDOTDIR {{{
-" if $VIMDOTDIR is set, replace $HOME by $VIMDOTDIR in the &ftp
-
-" VIMDOTDIR simulate $ZSHDOTDIR 
-if $VIMDOTDIR != ''
-    let &rtp=substitute( &rtp, '\v(^|,)'.$HOME, '\1'.$VIMDOTDIR , 'g' )
-endif
-" VIMRTP prepend to &rtp
-if $VIMRTP != ''
-    let &rtp=$VIMRTP.','.&rtp
-endif
 
 " }}}
 " General settings {{{
@@ -145,7 +90,7 @@ set notimeout nottimeout
 " always want status bar
 set laststatus=2
 set spf=~/.vim/spell/mine.latin1.add
-set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](y=%04l,vx=%04v)
+" "set statusline=%F%m%r%h%w\ [ff=%{&ff},ft=%Y][ascii=\%03.3b,hex=\%02.2B](y=%04l,vx=%04v)
 set dictionary+=~/.vim/dicts/tt2,~/.vim/dicts/html
 
 syn on
@@ -195,26 +140,13 @@ endif
 " }}}
 " recommended by cmd_mp.vim {{{
 set aw
-nnoremap ,c :make<cr>
+nnoremap ,x :make<cr>
 " }}}
 " programmers {{{
 let mapleader='('
 " }}}
-" what time is it ? {{{
-inoremap !now <c-r>=strftime("%d %Y %B (%T)")<cr>
-inoremap !today <c-r>=strftime("%B %d %Y")<cr>
-" bindzone serial
-inoremap !BZS <c-r>=strftime("%Y%m%d")<cr>
-" }}}
-" REMOVE? tabulations et indentations {{{
-" configurée comme suit apres lecture attentive de la doc.
-" set noexpandtab
-" set softtabstop=4
-" set shiftwidth=4
-"}}}
 " personnal filetypes {{{
 au BufNewFile *.xsl 0r~/.vim/templates/xsl.xsl
-" au BufNewFile *.bb 0r~/.vim/templates/busybox.bb
 au BufNewFile *.pl,*.t 0r~/.vim/templates/perl.pl | norm G
 au BufNewFile *.pm 0r~/.vim/templates/perl.pm 
 au BufRead slapd.conf setf slapd
@@ -231,39 +163,10 @@ au BufNewFile,BufRead *.tt2html
 au BufNewFile *.html 0r ~/.vim/templates/html5.html
 
 au BufRead psql.edit* setf sql
-let A="taupe"
-au StdinReadPre * let G="pouet"
 
-" au BufNewFile *.c 0r~/.vim/templates/c.c |
-" 	    \ %s/_DATE_/\=strftime("%d %Y %B (%T)")/
-
-au BufNewFile,BufRead,StdinReadPost *
-	    \ if getline(1) =~ '^diff\s\+--diff\>' | setf diff | endif
-
-" }}}
-" autocommands {{{
 au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dicts/'.&ft.'/*'
 au BufNewFile,BufRead Vagrantfile setf ruby
 " }}}
-" some diff tools {{{
-" command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-" command WriteDiff w | !diff % %.bckp > %.diff
-" 
-" set backup pm=.bckp
-" "function WriteDiff ()
-"     let s:filenew= expand('%')
-"     let s:fileold= s:filenew . &pm
-"     let s:srr = &srr 
-"     execute "set srr=>".s:filenew.".diff"
-"     echoerr &srr
-"     execute '!diff '. s:filenew .' '. s:fileold
-"     " set srr=s:srr
-" endfunction
-"
-" sync two diff views. (as i don''t know how to configure ...)
-" nnoremap ,l :let g:goodLine=line('.')<cr><c-w><c-w>:call cursor(g:goodLine,0)<cr>
-" }}}
-
 " lovely long parentheses indent in C too :)
 set cino=(s,m1
 
@@ -273,7 +176,6 @@ function FoldParagraph ()
 endfunction
 
 fu! NewFoldWhenLineMatches( lineMatches )
-
   if getline( v:lnum ) =~ '\v^\s*(#|$)'
     return '='
   endif
@@ -285,55 +187,44 @@ fu! NewFoldWhenLineMatches( lineMatches )
   endif
 
   return '='
-endfu
-" colorscheme morning
+endfu 
 
-vm   ,tos y<c-w>nP
-nmap ,sc  1GVG,tos
-
-iab cldt, cordialement,
-
-" todo:
-" - save current path
-" - do something like :Popd
-nnoremap ,zf :lcd <c-f><cr>:!zsh<cr>
+iab cdlt, cordialement,
 
 fun! NewFilter ( alias, filter )
-    " filter inplace
-    exec "nmap ,i" . a:alias . "  :%!"    . a:filter . "<cr>"
-    exec "vm   ,i" . a:alias . "  :!"     . a:filter . "<cr>"
-    " filter in new split
-    exec "nmap ,s" . a:alias . "  ,sc,i"  . a:alias . ""
-    exec "vm   ,s" . a:alias . "  ,tos,i" . a:alias . ""
-    " copy and filter
-    exec "vm   ,c" . a:alias . "  yPgv,i" . a:alias . ""
+    " filter inplace (c as in change, cw)
+    exec "nmap ,c" . a:alias . "  :%!". a:filter . "<cr>"
+    exec "vm   ,c" . a:alias . "  :!" . a:filter . "<cr>"
+    " new window (w as in window) 
+    exec "nmap ,w" . a:alias . "  ,wnp,c"  . a:alias . ""
+    exec "vm   ,w" . a:alias . "  ,wnp,c" . a:alias . ""
+    " filter on paste
+    exec "vm   ,f" . a:alias . "  yPgv,c" . a:alias . ""
 endf
-call NewFilter('Z','zsh')
+
+" all the file or the visual selection can be piped to 
+" which means (see NewFilter): 
+" ,wz open a new window with the result of a zsh filtering 
+call NewFilter('z','zsh')
 call NewFilter('5','perl')
 call NewFilter('6','perl6')
-call NewFilter('T','textile')
+call NewFilter('t','textile')
 
+" echo map(['j','s','n','l','qu'],"\"inoremap v:val ' v:val <c-k>'9")
+" inoremap j' j<c-k>'9
+" inoremap s' s<c-k>'9
+" inoremap n' n<c-k>'9
+" inoremap s' s<c-k>'9
+" inoremap l' l<c-k>'9
+" inoremap qu' qu<c-k>'9
 
+com -complete=custom,ListUsers -nargs=1 Shoot :wincmd new|<args>
+fun ListUsers(A,L,P)
+    return system("cat ~/.vim/rt/users")
+endfun
 
-" debian see
-" nnoremap <F2> Y<c-w><c-n>P:s/^\v....(\S+).*/aptitude show \1/<bar>.!sh<cr>
+nnoremap ,m :let @/='X'<cr><c-w><c-n>:setf mail<cr>:0r~/.vim/mutt_drafts/
 
-" #TODO: it would be nice if: 
-" - check this is a valid email template
-" - add utf8 compatibility
-"nnoremap ,m :%w !sendmail -t<cr> 
-"
-"
+com!  -complete=filetype -nargs=1 Sp wincmd n | setf <args>
 
-" vim -b : edit binary using xxd-format!
-augroup Binary
-  au!
-  au BufReadPre  *.bin let &bin=1
-  au BufReadPost *.bin if &bin | %!xxd
-  au BufReadPost *.bin set ft=xxd | endif
-  au BufWritePre *.bin if &bin | %!xxd -r
-  au BufWritePre *.bin endif
-  au BufWritePost *.bin if &bin | %!xxd
-  au BufWritePost *.bin set nomod | endif
-augroup END
-
+set colorcolumn=80

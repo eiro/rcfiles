@@ -34,7 +34,7 @@ set completion-query-items 150
 # }}}
 
 $if mysql 
-$include /home/mc/local/etc/readline/sql_abbr
+$include /home/mc/.readline/sql_abbr
 "DE ": "describe " 
 ";;": "\\G\n"
 ";fp": "flush privileges; " 
@@ -42,4 +42,9 @@ $include /home/mc/local/etc/readline/sql_abbr
 ";st": "show tables; " 
 "!st": "show tables;;" 
 $endif
+
+# $if perlude 
+#     # C-l: clear-screen
+# $endif
+
 

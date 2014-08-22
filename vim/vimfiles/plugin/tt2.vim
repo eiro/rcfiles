@@ -22,7 +22,7 @@ inoremap %%S [% SWITCH  %]<cr>[% END %]<esc>k$2hi
 inoremap %%F [% FOR  %]<cr>[% END %]<esc>k$2hi
 inoremap %%B [% BLOCK  %]<cr>[% END %]<esc>k$2hi
 inoremap %%I [% IF  %]<cr>[% END %]<esc>k$2hi
-inoremap %%U [% UNLESS  %]<cr>[% END %]<esc>k$2hi
+inoremap %%U [% UNLESS  %]<cr>[% END %]<esc>k$2hi 
 
 inoremap ;;W WRAPPER ;<cr>END;<esc>k$i
 inoremap ;;S SWITCH ;<cr>END;<esc>k$i

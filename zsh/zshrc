@@ -1,24 +1,18 @@
-# vim: ft=zsh sw=4
+# vim: ft=zsh sw=4 fdm=marker path+=~/bin,~/src/unistra/bin
+alias cc='gcc -pedantic -Wall -Werror -std=c99' 
 
-setopt histignorealldups interactivecomments promptcr
-hash -d m=~/src/perl/5/lib 
-export PS1="[%T] %n@%M%b:%d
-> "
+. uze/eiro/_rc
 
-alias U='vim -'
-alias cc='gcc -pedantic -Wall -Werror -std=c99'
-ff () { find "$@" -type f }
-
-precmd () {
-    local gitwhere=$( shush2 git symbolic-ref HEAD)
-    [[ -n $gitwhere ]] || gitwhere=$( shush2 git describe)
-    [[ -n $gitwhere ]] && {
-        local modif="$( shush2 git status -s |wc -l )"
-        [[ $modif == 0 ]] && modif="" || modif="($modif files modified)"
-        gitwhere="[${gitwhere##*/}$modif]"
-    }
-    export PS1="[%T] %n@%M%b:%~ $gitwhere"$'\n'"> "
-}
+# precmd () {
+#     local gitwhere=$( shush2 git symbolic-ref HEAD)
+#     [[ -n $gitwhere ]] || gitwhere=$( shush2 git describe)
+#     [[ -n $gitwhere ]] && {
+#         local modif="$( shush2 git status -s |wc -l )"
+#         [[ $modif == 0 ]] && modif="" || modif="($modif files modified)"
+#         gitwhere="[${gitwhere##*/}$modif]"
+#     }
+#     export PS1="[%T] %n@%M%b:%~ $gitwhere"$'\n'"> "
+# }
 
 title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
 
@@ -33,12 +27,10 @@ entitle () {
 
 : ~/todo/today(Ne:'
     title today tasks
-    print daily setup
     sed "10q;/^$/q" $REPLY
-    print daily report
 ':)
 
-i_have tmux && entitle "tmux sessions" tmux ls 
+#is_installed tmux && entitle "tmux sessions" tmux ls 
 
 i_setup_my_day () {
     ( cd ~/todo
@@ -55,8 +47,15 @@ i_made_my_day () {
 for f ( $~glob_zshrc_files ) source $f
 
 compdef _man superman
-vsympaql () { ssh -h home vsympaql }
+vsympaql () { ssh -t home vsympaql }
 
 alias vt='( cd ~/todo; vim today)'
+alias an='annuaire/show' 
 
-
+# following http://www.linux-mag.com/id/1106/ tutorial
+# found with (http://www.bash2zsh.com/)
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name ''

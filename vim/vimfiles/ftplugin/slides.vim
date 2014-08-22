@@ -4,14 +4,15 @@
 " Dw = ◇
 
 " :h fold.txt is a must but you'll basically use zj and zk
+" \ foldmarker=▢,ロ
 
 setlocal nonu cursorline so=999
     \ laststatus=0 fdm=marker
-    \ foldmarker=▢,ロ
+    \ foldmarker=▼,▲
     \ foldtext=substitute(getline(v:foldstart),'.\\v(.*)','\\1\ \ \','')
 
 " in normal and insert mode ,, to add a slide
-inoremap ,, <c-k>RO<cr><cr><c-t><c-k>Dw <cr><c-d><cr><c-k>Ro<c-o>4k<space>
+inoremap ,, <c-k>Dt<cr><cr><c-t><c-k>Sb <cr><c-d><cr><c-k>UT<c-o>4k<space>
 nmap ,, o,,
 
 " ,z pipe a line to zsh

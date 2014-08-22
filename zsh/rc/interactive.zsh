@@ -19,22 +19,30 @@ zstyle ':completion:*' group-name ''
 bindkey -v
 
 # khatar's vi mapping
-bindkey -s '((' '()\ei'
-bindkey -s '( (' '(   )\ehhi'
-bindkey -s '(((' '(\ea(   ))\ehhhi'
-bindkey -s '{{' '{}\ei'
-bindkey -s '{ {' '{  }\ehi'
-bindkey -s '{{{' '{\ea{   }}\ehhhi'
+# bindkey -s '((' '()\ei'
+# bindkey -s '( (' '(   )\ehhi'
+# bindkey -s '(((' '(\ea(   ))\ehhhi'
+# bindkey -s '{{' '{}\ei'
+# bindkey -s '{ {' '{  }\ehi'
+# bindkey -s '{{{' '{\ea{   }}\ehhhi'
+# bindkey -s '[[' '[]\ei'
+# bindkey -s '[ [' '[   ]\ehhi'
+# bindkey -s '[[[' '[\ea[   ]]\ehhhi'
+# bindkey -s '[-' '[\ea[ -  ]]\ehhhi'
+# bindkey -s "''" "'\ea'\ei"
+# bindkey -s '""' '"\ea"\ei'
+# bindkey -s '(F' 'for x ()\ei'
+# bindkey -s '{w' 'while {} {}\e4ha'
 
-bindkey -s '[[' '[]\ei'
-bindkey -s '[ [' '[   ]\ehhi'
-bindkey -s '[[[' '[\ea[   ]]\ehhhi'
-
-bindkey -s "''" "'\ea'\ei"
-bindkey -s '""' '"\ea"\ei'
-
-bindkey -s '(F' 'for e ()\ei'
-
+# khatar's vi mapping
+bindkey -s '(' '^v()\ei'
+bindkey -s '{' '^v{}\ei'
+bindkey -s '[' '^v[]\ei'
+bindkey -s "'" "^v'^v'\ei"
+bindkey -s '"' '^v"^v"\ei'
+bindkey -s '(F' 'for x ('
+bindkey -s '{w' 'while ^v{} ^v{}\e4ha'
+ 
 # get lost ? RTFM!
 autoload run-help
 bindkey -a '\eh' run-help
@@ -42,8 +50,8 @@ bindkey -a '\eh' run-help
 # edit commandline with your favorite ($FCEDIT)or
 autoload edit-command-line
 zle -N edit-command-line
-bindkey '\ev' edit-command-line
-bindkey '^ec' _complete_help
+bindkey -a '\ev' edit-command-line
+bindkey -a '\ec' _complete_help
 
 compdef _gnu_generic ctags
 compdef _gnu_generic zenity
