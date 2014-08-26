@@ -2,12 +2,13 @@
 
 DEBIAN_PREVENT_KEYBOARD_CHANGES= # fuck you, debian!
 
-# http://www.openssh.com/txt/release-6.6
 export TEXMFHOME=~/local/texmf
 export EMAIL=khatar@phear.org # used by some tools (debian devscripts, mutt, ...)
 export EDITOR=vim
 export PAGER=less
-export LC_ALL=en_US.utf8 # locale -a to list available 
+export LC_ALL=
+export LANGUAGE=
+# export LC_ALL=en_US.utf8 # locale -a to list available 
 export ZSHDOT=~/local/etc/zsh
 export DOKUWIKI_CLIENT_BASE=https://di.u-strasbg.fr/
 export DOKUWIKI_CLIENT_MACHINE=unistra
@@ -26,7 +27,6 @@ path=( $path ~/bin ~/src/unistra/bin ~/local/opt/rust-0.9/install/bin )
 
 # ~u for UNISTRA.  TODO: split, document, push ... 
 hash -d u=~/bin/u
-. ~u/perso 
 . ~u/helpers 
 
 export RT_WORKSPACE=~/todo/bt
@@ -92,7 +92,7 @@ mailpath+=( '/var/spool/mail/mc?new local mail' )
 function () {
     local f
     for f { mailpath+=( "$f?new $f:t mail" ) }
-} ~/local/mail/*(/)
+} ~/local/mail/*(N/)
 
 path+=( ~/node_modules/*/bin(N) )
 
