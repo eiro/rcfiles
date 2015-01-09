@@ -192,14 +192,14 @@ endfu
 iab cdlt, cordialement,
 
 fun! NewFilter ( alias, filter )
-    " filter inplace (c as in change, cw)
-    exec "nmap ,c" . a:alias . "  :%!". a:filter . "<cr>"
-    exec "vm   ,c" . a:alias . "  :!" . a:filter . "<cr>"
+    " filter inplace (f as in filter)
+    exec "nmap ,f" . a:alias . "  :%!". a:filter . "<cr>"
+    exec "vm   ,f" . a:alias . "  :!" . a:filter . "<cr>"
     " new window (w as in window) 
-    exec "nmap ,w" . a:alias . "  ,wnp,c"  . a:alias . ""
-    exec "vm   ,w" . a:alias . "  ,wnp,c" . a:alias . ""
-    " filter on paste
-    exec "vm   ,f" . a:alias . "  yPgv,c" . a:alias . ""
+    exec "nmap ,w" . a:alias . "  <c-w>n,f"  . a:alias . ""
+    exec "vm   ,w" . a:alias . "  <c-w>n,f" . a:alias . ""
+    " copy and filter (s like show)
+    exec "vm   ,s" . a:alias . "  yPgv,f" . a:alias . ""
 endf
 
 " all the file or the visual selection can be piped to 
