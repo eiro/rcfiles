@@ -58,4 +58,13 @@ compdef _gnu_generic zenity
 compdef _gnu_generic source-highlight
 compdef 'compadd ~/.mutt/accounts/*(:r:t)' box
 
-autoload -U zed
+autoload -U zed 
+
+# following http://www.linux-mag.com/id/1106/ tutorial
+# found with (http://www.bash2zsh.com/)
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name ''
+

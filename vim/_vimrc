@@ -2,16 +2,27 @@
 " because sometime you make mistakes:
 " set debug=msg
 
+
+" JFDI:
+" cd ~/.vim
+" git clone https://github.com/tpope/vim-pathogen.git pathogen
+
+
+
 set nocp
 set rtp+=~/.vim/pathogen
-call pathogen#infect()
+" call pathogen#infect()
 
-" rtp is like zsh $path, update it ... 
-" set rtp+=~/.vim/bundle/dwm.vim
-" set rtp+=~/.vim/bundle/info.vim
-" set rtp+=~/.vim/bundle/rt-client
-" set rtp+=~/.vim/bundle/tslime.vim
-" set rtp+=~/.vim/bundle/vim-fugitive
+" infection including:
+" rt-client git@github.com:eiro/vim-rt-client
+" fugitive  https://github.com/tpope/vim-fugitive.git
+" tslime    https://github.com/kikijump/tslime.vim.git
+" info      https://github.com/vim-scripts/info.vim.git
+" airline   https://github.com/bling/vim-airline.git
+
+
+" also worth testing (rtp is like zsh $path, update it ...)
+" trying to replace pathogen by just rtp+= then 
 " set rtp+=~/.vim/bundle/vim-perl
 " set rtp+=~/.vim/bundle/airline
 
