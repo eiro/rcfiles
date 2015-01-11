@@ -1,10 +1,5 @@
-setopt autocd       # don't type cd 
 setopt autopushd    # so cd <tab> will be magic
-setopt extendedglob # for recursivity, captures and so on 
-setopt braceccl     # {a-z} works
 
-autoload -U compinit
-compinit -d ~/.$HOST.compdump
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format '%B%d%b'

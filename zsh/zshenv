@@ -1,7 +1,7 @@
 # vim: ft=zsh sw=4 fdm=marker path+=~/bin,~/src/unistra/bin
 
 DEBIAN_PREVENT_KEYBOARD_CHANGES= # fuck you, debian!
-
+skip_global_compinit= # also:  fuck you, debian!
 export TEXMFHOME=~/local/texmf
 export EMAIL=khatar@phear.org # used by some tools (debian devscripts, mutt, ...)
 export EDITOR=vim
@@ -13,17 +13,12 @@ export ZSHDOT=~/local/etc/zsh
 export DOKUWIKI_CLIENT_BASE=https://di.u-strasbg.fr/
 export DOKUWIKI_CLIENT_MACHINE=unistra
 
-setopt warncreateglobal nounset extendedglob braceccl
 setopt pathdirs 
-
-path=( $path ~/bin ~/src/unistra/bin ~/local/opt/rust-0.9/install/bin ) 
-
+path=( ~/bin $path )
 . uze/uze
-. uze/eiro/env/std
 . uze/eiro/env/more
 . uze/eiro/env/homebrew
 . uze/unistra/annuaire
-. uze/atombomb
 
 # ~u for UNISTRA.  TODO: split, document, push ... 
 hash -d u=~/bin/u
@@ -68,6 +63,7 @@ t () {
     shush tmux att -t $1 ||
         tmux new -s $1
 }
+
 
 mired     () { perl -MMARC::MIR -w -0x1d -nE "$@" }
 marcdump  () { mired 'say for_humans from_iso2709' "$@" }

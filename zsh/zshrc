@@ -1,19 +1,10 @@
 # vim: ft=zsh sw=4 fdm=marker path+=~/bin,~/src/unistra/bin
-alias cc='gcc -pedantic -Wall -Werror -std=c99' 
+# don't delegate compinit to avoid conflicts between local settings and uze
 
-for f ( $~glob_zshrc_files ) source $f
+autoload -U compinit
+compinit -d ~/.$HOST.compdump
 . uze/eiro/_rc
-
-# precmd () {
-#     local gitwhere=$( shush2 git symbolic-ref HEAD)
-#     [[ -n $gitwhere ]] || gitwhere=$( shush2 git describe)
-#     [[ -n $gitwhere ]] && {
-#         local modif="$( shush2 git status -s |wc -l )"
-#         [[ $modif == 0 ]] && modif="" || modif="($modif files modified)"
-#         gitwhere="[${gitwhere##*/}$modif]"
-#     }
-#     export PS1="[%T] %n@%M%b:%~ $gitwhere"$'\n'"> "
-# }
+for f ( $~glob_zshrc_files ) source $f
 
 title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
 
@@ -26,27 +17,12 @@ entitle () {
     print $content
 }
 
+is_installed tmux && entitle "tmux sessions" tmux ls
 : ~/todo/today(Ne:'
     title today tasks
     sed "10q;/^$/q" $REPLY
 ':)
 
-#is_installed tmux && entitle "tmux sessions" tmux ls 
-
-i_setup_my_day () {
-    ( cd ~/todo
-        git add today
-        git ci -m "starting $( date +%F )" )
-}
-
-i_made_my_day () {
-    ( cd ~/todo
-        git add today
-        git ci -m "reporting $( date +%F )" )
-}
 
 compdef _man superman
-vsympaql () { ssh -t home vsympaql }
-
 alias vt='( cd ~/todo; vim today)'
-alias an='annuaire/show' 
