@@ -12,6 +12,7 @@ export LANGUAGE=
 export ZSHDOT=~/local/etc/zsh
 export DOKUWIKI_CLIENT_BASE=https://di.u-strasbg.fr/
 export DOKUWIKI_CLIENT_MACHINE=unistra
+export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
 setopt pathdirs 
 path=( ~/bin $path )

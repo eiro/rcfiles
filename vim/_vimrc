@@ -2,54 +2,18 @@
 " because sometime you make mistakes:
 " set debug=msg
 
-
-" JFDI:
-" cd ~/.vim
-" git clone https://github.com/tpope/vim-pathogen.git pathogen
-
-
-
 set nocp
 set rtp+=~/.vim/pathogen
-" call pathogen#infect()
+call pathogen#infect()
 
-" infection including:
-" rt-client git@github.com:eiro/vim-rt-client
-" fugitive  https://github.com/tpope/vim-fugitive.git
-" tslime    https://github.com/kikijump/tslime.vim.git
-" info      https://github.com/vim-scripts/info.vim.git
-" airline   https://github.com/bling/vim-airline.git
-
-
-" also worth testing (rtp is like zsh $path, update it ...)
-" trying to replace pathogen by just rtp+= then 
-" set rtp+=~/.vim/bundle/vim-perl
-" set rtp+=~/.vim/bundle/airline
-
-" works well with mp_cmd.vim {{{
 set aw
 nnoremap ,x :make<cr>
-" }}}
 
 " i guess it was about python ? {{{
 set et
 set listchars=tab:>- 
 nnoremap ,l :set list!<cr>
 " }}}
-
-
-fun! Scratchpad(...)
-    let ft = get( filter( ["a:000[0]","&ft"], "exists(v:val)" ), 0)
-    if exists(ft) | exec "let ft = ".ft
-    else          | let ft = "default"
-    endif
-    exec "edit ~/.vim/scratchpad/".ft
-    " TODO:
-    " au BufNewFile .vim/scratchpad setf expand("%:t")
-    " would be smarter as you can reopen the scratchpad manually
-    exec "setf ".ft
-endf 
-command -nargs=* -complete=filetype Scratchpad call Scratchpad(<f-args>)
 
 command -nargs=1 -complete=command Sh
     \| let g:ShPwd=getcwd()
