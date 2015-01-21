@@ -19,7 +19,7 @@
 fun! Scratchpad(...)
 
     if !exists('$VIM_SCRATCHPAD_ROOT')
-        $VIM_SCRATCHPAD_ROOT=$HOME."/.vim-scratchpad"
+        let $VIM_SCRATCHPAD_ROOT=$HOME."/.vim-scratchpad"
     end
 
     let ft = get( filter( ["a:000[0]","&ft"], "exists(v:val)" ), 0)
