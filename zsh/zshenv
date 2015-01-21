@@ -15,7 +15,7 @@ export DOKUWIKI_CLIENT_MACHINE=unistra
 export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
 setopt pathdirs 
-path=( ~/bin $path )
+path=( ~/bin ~/node_modules/*/bin(N) $path )
 . uze/uze
 . uze/eiro/env/more
 . uze/eiro/env/homebrew
@@ -36,71 +36,23 @@ p5/env/dev
 glob_zshenv_files="$ZSHDOT/env/*.zsh(N)"
 glob_zshrc_files="$ZSHDOT/rc/*.zsh(N)"
 
-gfv () { perl ~p5/get-flash-videos/get_flash_videos }
-
-fpath+=$ZSHDOT/lib 
-
-# subcommands_of () {
-#     local cmd=$1
-#     shift
-#     source <( print $cmd' () {
-#         if (( $+1 )) { '$cmd'/$1 $argv[2,-1] } else { '$cmd'/_usage }
-#         }' )
-# }
-# 
-# subcommands_of sq config
-# subcommands_of uds
-
 for f ( $~glob_zshenv_files ) source $f
 
-ssl_get_cert () {
-    :| openssl s_client -connect $1:${2:-993} 2>/dev/null |
-	sed -n '/BEGIN/,/END/p'
+. uze/whence
+alias b=whence/readlink
+
+mailsync () {
+    cd ~/local/mail && yes |
+        shush2 mbsync -qa
 }
 
-t () {
-    (( $+1 )) ||
-        {tmux ls -F '#S'; return} 
-    shush tmux att -t $1 ||
-        tmux new -s $1
-}
-
-
-mired     () { perl -MMARC::MIR -w -0x1d -nE "$@" }
-marcdump  () { mired 'say for_humans from_iso2709' "$@" }
-
-perlude () {
-    rlwrap -C perlude --complete-filenames --no-children \
-        -H ~/.perlude/history \
-        -f ~/.readline/abbr/perlude \
-        -S "perlude> " \
-        perl shell.pl
-        #perl5i -wMDevel::SimpleTrace shell.pl
-}
-
-mount_ssh_home () { local p=~/net/$1 shush2 mkdir -p ${p}: && sshfs $1 $p }  
-netcd () { mount_ssh_home $1 && cd ~/net/$1 } 
-
-command/path () { eval `whence -w $1 | sed  -rn 's/(.*): command$/readlink -e =\1/p'` }   
-
-mailsync () { ( cd ~/local/mail && yes | shush2 mbsync -qa ) }
 mailpath+=( '/var/spool/mail/mc?new local mail' ) 
-
 function () {
     local f
     for f { mailpath+=( "$f?new $f:t mail" ) }
-} ~/local/mail/*(N/)
+}   ~/local/mail/*(N/)
 
-path+=( ~/node_modules/*/bin(N) )
-
-curl/tarx () {
-    setopt localoptions xtrace
-    local tarball=$1
-    shift
-    tar x "$@" $tarball
-}
-
-5 () { perl $argv[1,-2] -E $argv[-1] } 
+5 () { perl -E "$@" }
 
 # add to prompt
 has_cabal_sandbox () {
@@ -113,7 +65,6 @@ has_cabal_sandbox () {
     }
 }
 
-
-
-
+. uze/muML
+alias M=muML/T_/to
 

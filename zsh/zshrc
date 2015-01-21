@@ -4,6 +4,9 @@
 autoload -U compinit
 compinit -d ~/.$HOST.compdump
 . uze/eiro/_rc
+. uze/tmux
+alias t=tmux/smart
+
 for f ( $~glob_zshrc_files ) source $f
 
 title () { print -- ${(r:$COLUMNS::-:):-"--\[ $* ]--"} }
