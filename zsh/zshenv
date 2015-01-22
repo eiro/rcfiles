@@ -12,6 +12,7 @@ export LANGUAGE=
 export ZSHDOT=~/local/etc/zsh
 export DOKUWIKI_CLIENT_BASE=https://di.u-strasbg.fr/
 export DOKUWIKI_CLIENT_MACHINE=unistra
+
 export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
 setopt pathdirs 
@@ -68,3 +69,5 @@ has_cabal_sandbox () {
 . uze/muML
 alias M=muML/T_/to
 
+export -UT VIM_EXTRA_PATH vim_extra_path
+path=( $vim_extra_path $path )
