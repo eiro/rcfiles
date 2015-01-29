@@ -69,5 +69,13 @@ has_cabal_sandbox () {
 . uze/muML
 alias M=muML/T_/to
 
+export -UT M4PATH m4path
+m4path=( ~/src/m4/*/lib $m4path )
+
+# if $VIM_EXTRA_PATH set in vim, make them available from the shell
 export -UT VIM_EXTRA_PATH vim_extra_path
-path=( $vim_extra_path $path )
+path=( $vim_extra_path $path ) 
+
+. uze/eiro/blog
+alias bloge=eiro/blog/entry
+
