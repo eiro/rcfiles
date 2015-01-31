@@ -29,3 +29,4 @@ is_installed tmux && entitle "tmux sessions" tmux ls
 
 compdef _man superman
 alias vt='( cd ~/todo; vim today)'
+alias D='vim .'
