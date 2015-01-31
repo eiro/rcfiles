@@ -26,7 +26,7 @@ fun FuzzySearch(...)
     " by adding non greedy matches (:h /\{)
     " between the parts ot the fuzzy. 
 
-    let @/ = '\c\v'.join(a:000,'.\{-}') 
+    let @/ = '\c\v'.join(a:000,'.{-}') 
 
     " add it in the search history
     call histadd('/',@/)
