@@ -171,8 +171,8 @@ fun! NewFilter ( alias, filter )
     exec "nmap ,f" . a:alias . "  :%!". a:filter . "<cr>"
     exec "vm   ,f" . a:alias . "  :!" . a:filter . "<cr>"
     " new window (w as in window) 
-    exec "nmap ,w" . a:alias . "  <c-w>n,f"  . a:alias . ""
-    exec "vm   ,w" . a:alias . "  <c-w>n,f" . a:alias . ""
+    exec "nmap ,w" . a:alias . "  %y<c-w>np,f"  . a:alias . ""
+    exec "vm   ,w" . a:alias . "  y<c-w>np,f" . a:alias . ""
     " copy and filter (s like show)
     exec "vm   ,s" . a:alias . "  yPgv,f" . a:alias . ""
 endf
@@ -207,3 +207,4 @@ set colorcolumn=80
 nnoremap ,ff :enew<cr>:set buftype=nofile<cr>:silent 0r!find * -type f<cr>
 
 let g:ctrlp_map = '<c-x><c-p>'
+
