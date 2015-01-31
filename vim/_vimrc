@@ -18,10 +18,12 @@ nnoremap ,l :set list!<cr>
 command -nargs=* -complete=command Zt
     \| e /tmp/zshS.$USER.$$
     \| inoremap <buffer><cr> <esc>Yp!!z<cr>
+    \| nnoremap <buffer><cr> Yp!!z<cr>
 
 command -nargs=* -complete=command Z
     \| e /tmp/zshS.$USER.state
     \| inoremap <buffer><cr> <esc>Yp!!z<cr>
+    \| nnoremap <buffer><cr> Yp!!z<cr>
 
 
 command -nargs=* Perldoc wincmd n 
@@ -210,9 +212,3 @@ set colorcolumn=80
 nnoremap ,ff :enew<cr>:set buftype=nofile<cr>:silent 0r!find * -type f<cr>
 
 let g:ctrlp_map = '<c-x><c-p>'
-
-
-
-
-
-
