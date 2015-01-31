@@ -79,3 +79,4 @@ path=( $vim_extra_path $path )
 . uze/eiro/blog
 alias bloge=eiro/blog/entry
 
+alias z=zsh
