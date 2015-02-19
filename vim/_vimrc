@@ -11,23 +11,22 @@ nnoremap ,x :make<cr>
 
 " i guess it was about python ? {{{
 set et
-set listchars=tab:>- 
+set listchars=tab:>-
 nnoremap ,l :set list!<cr>
 " }}}
 
-command -nargs=* -complete=command Zt
-    \| e /tmp/zshS.$USER.$$
-    \| inoremap <buffer><cr> <esc>Yp!!z<cr>
-    \| nnoremap <buffer><cr> Yp!!z<cr>
+func ZshWin()
+    enew|set buftype=nofile
+    imap     <buffer><cr> <esc><cr>
+    nnoremap <buffer><cr> Yp!!z<cr>
+    nnoremap <buffer>K  :Man <cfile><cr>
+endfunc
+nnoremap q! :call ZshWin()<cr>
 
-command -nargs=* -complete=command Z
-    \| e /tmp/zshS.$USER.state
-    \| inoremap <buffer><cr> <esc>Yp!!z<cr>
-    \| nnoremap <buffer><cr> Yp!!z<cr>
+command -nargs=* Man enew|set buftype=nofile filetype=man
+    \| silent 0r!man <args>
 
-
-command -nargs=* Perldoc wincmd n 
-    \| setf man
+command -nargs=* Perldoc enew|set buftype=nofile filetype=man
     \| silent 0r!perldoc -t <args> || perldoc -t -f <args>
 
 " recent/experimental additions {{{
@@ -206,6 +205,7 @@ endfun
 nnoremap ,m :let @/='X'<cr><c-w><c-n>:setf mail<cr>:0r~/.vim/mutt_drafts/
 
 com!  -complete=filetype -nargs=1 Sp wincmd n | setf <args>
+com!  -nargs=0 T e ~/todo/today
 
 set colorcolumn=80 
 
