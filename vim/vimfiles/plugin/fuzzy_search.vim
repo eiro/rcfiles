@@ -17,7 +17,7 @@
 " cons:
 " * no shiny things like onfly update
 
-fun FuzzySearch(...)
+fun! FuzzySearch(...)
 
     " slurpy args, see
     " :h a:000
@@ -25,8 +25,12 @@ fun FuzzySearch(...)
     " update the "last search register" (:h quote/)
     " by adding non greedy matches (:h /\{)
     " between the parts ot the fuzzy. 
-
-    let @/ = '\c\v'.join(a:000,'.{-}') 
+    
+    " let @/ = '\v'.join(a:000,'.{-}')
+    let patchunks = copy(a:000)
+    let pat1 = join(patchunks,'.{-}')
+    let pat2 = join(reverse(patchunks),'.{-}')
+    let @/ = printf('\v\c((%s)|(%s))', pat1, pat2)
 
     " add it in the search history
     call histadd('/',@/)
