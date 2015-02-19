@@ -7,9 +7,10 @@ imap (V values(
 imap (C count(
 imap (D distinct(
 
-inoremap ??T show tables<esc>!!
-inoremap ??D <esc>yawodescribe <c-o>p<esc>!!
-nnoremap ??D yawodescribe <c-o>p<esc>!!
+inoremap !! <esc>!!<up>
+inoremap ??T <esc>oshow tables<esc>!!<up>
+inoremap ??D <esc>yawodescribe <c-o>p<esc>!!<up>
+nnoremap ??D yawodescribe <c-o>p<esc>!!<up>
 
 iab CR create
 iab DR drop
@@ -17,4 +18,3 @@ iab F from
 iab W where 
 iab desc describe 
 set iskeyword+=.
-
