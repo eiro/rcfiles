@@ -8,29 +8,29 @@ export EDITOR=vim
 export PAGER=less
 export LC_ALL=
 export LANGUAGE=
-# export LC_ALL=en_US.utf8 # locale -a to list available 
+# export LC_ALL=en_US.utf8 # locale -a to list available
 export ZSHDOT=~/local/etc/zsh
 export DOKUWIKI_CLIENT_BASE=https://di.u-strasbg.fr/
 export DOKUWIKI_CLIENT_MACHINE=unistra
 
 export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
-setopt pathdirs 
+setopt pathdirs
 path=( ~/bin ~/node_modules/*/bin(N) $path )
 . uze/uze
 . uze/eiro/env/more
 . uze/eiro/env/homebrew
 . uze/unistra/annuaire
 
-# ~u for UNISTRA.  TODO: split, document, push ... 
+# ~u for UNISTRA.  TODO: split, document, push ...
 hash -d u=~/bin/u
-. ~u/helpers 
+. ~u/helpers
 
 export RT_WORKSPACE=~/todo/bt
 . uze/rt
 
-hash -d p5=~/src/perl/5/lib 
-. uze/p5/env 
+hash -d p5=~/src/perl/5/lib
+. uze/p5/env
 p5/env/local
 p5/env/dev
 
@@ -47,7 +47,7 @@ mailsync () {
         shush2 mbsync -qa
 }
 
-mailpath+=( '/var/spool/mail/mc?new local mail' ) 
+mailpath+=( '/var/spool/mail/mc?new local mail' )
 function () {
     local f
     for f { mailpath+=( "$f?new $f:t mail" ) }
@@ -74,9 +74,17 @@ m4path=( ~/src/m4/*/lib $m4path )
 
 # if $VIM_EXTRA_PATH set in vim, make them available from the shell
 export -UT VIM_EXTRA_PATH vim_extra_path
-path=( $vim_extra_path $path ) 
+path=( $vim_extra_path $path )
 
 . uze/eiro/blog
 alias bloge=eiro/blog/entry
 
+netrw/vil () {
+    local list=$1
+    [[ - == $1 ]] && read list
+    list=${list/-(owner|request)@/@}
+    print e scp://s/$( sz s <<< "sympa/list/path $list" )/config
+}
+
 alias z=zsh
+#path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )
