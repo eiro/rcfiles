@@ -70,7 +70,7 @@ has_cabal_sandbox () {
 alias M=muML/T_/to
 
 export -UT M4PATH m4path
-m4path=( ~/src/m4/*/lib $m4path )
+m4path=( ~/src/m4/*/lib(N) $m4path )
 
 # if $VIM_EXTRA_PATH set in vim, make them available from the shell
 export -UT VIM_EXTRA_PATH vim_extra_path
