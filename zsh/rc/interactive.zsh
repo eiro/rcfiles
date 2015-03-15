@@ -47,6 +47,7 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey -a '\ev' edit-command-line
 bindkey -a '\ec' _complete_help
+bindkey '^R' history-incremental-search-backward
 
 compdef _gnu_generic ctags
 compdef _gnu_generic zenity
