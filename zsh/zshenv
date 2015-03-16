@@ -87,4 +87,8 @@ netrw/vil () {
 }
 
 alias z=zsh
+
+uzu ldap
+alias lfm=ldap/filter/minify
+
 #path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )
