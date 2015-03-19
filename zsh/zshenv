@@ -77,7 +77,7 @@ export -UT VIM_EXTRA_PATH vim_extra_path
 path=( $vim_extra_path $path )
 
 . uze/eiro/blog
-alias bloge=eiro/blog/entry
+bloge () {eiro/blog/entry "$@"}
 
 netrw/vil () {
     local list=$1
@@ -89,6 +89,16 @@ netrw/vil () {
 alias z=zsh
 
 uzu ldap
-alias lfm=ldap/filter/minify
+lfm () {ldap/filter/minify "$@"}
+
+ldapvi/_q () {
+    local query="$( ${f?use wrappers, you fool!} )"
+    ldapvi "$@" "$query" 
+}
+
+# udcrud: Unistra Directory CRUD ? ok ... i'm tired! 
+udq () { f=ldap/filter/minify ldapvi/_q "$@" }
+
 
 #path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )
+
