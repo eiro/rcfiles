@@ -212,3 +212,7 @@ set colorcolumn=80
 nnoremap ,ff :enew<cr>:set buftype=nofile<cr>:silent 0r!find * -type f<cr>
 
 let g:ctrlp_map = '<c-x><c-p>'
+
+" i said: i *WANT* to edit this file!
+nnoremap ,gf :echo system("mkdir -p ".expand('<cfile>:h'))<cr>:e <cfile><cr>
+
