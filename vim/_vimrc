@@ -216,3 +216,4 @@ let g:ctrlp_map = '<c-x><c-p>'
 " i said: i *WANT* to edit this file!
 nnoremap ,gf :echo system("mkdir -p ".expand('<cfile>:h'))<cr>:e <cfile><cr>
 
+com RTU call BufPick('0r$RT_WORKSPACE/users','s/\s.*//')
