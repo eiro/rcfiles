@@ -6,9 +6,10 @@ set nocp
 set rtp+=~/.vim/pathogen
 call pathogen#infect()
 
+" recommended by cmd_mp.vim {{{
 set aw
 nnoremap ,x :make<cr>
-
+" }}}
 " i guess it was about python ? {{{
 set et
 set listchars=tab:>-
@@ -116,10 +117,6 @@ else
   " colorscheme darkblue
   " set background=light
 endif
-" }}}
-" recommended by cmd_mp.vim {{{
-set aw
-nnoremap ,x :make<cr>
 " }}}
 " programmers {{{
 let mapleader=','
