@@ -9,9 +9,14 @@ my_env_works () {
 
     for x ( E s z sz g rt t lfm ) {
         shush whence $x; ok "$x is ready for action"
-    }
+    } 
+
+    . uze/rt
+    local got expected
+    got="$( rt/-query "_YOURS_ and status=stalled" )"
+    expected='Owner=__CurrentUser__ and status=stalled'
+    is $got $expected "uze/rt and m4/rtquery ok"
 
 } 
-
 
 prove my_env_works   
