@@ -22,6 +22,9 @@ path=( ~/bin ~/node_modules/*/bin(N) $path )
 . uze/eiro/env/homebrew
 . uze/unistra/annuaire
 
+export LOCAL_DEBIAN_REPO=~/www/packages/rt
+
+hash -d debrepo=$HOME/local/debs
 # ~u for UNISTRA.  TODO: split, document, push ...
 hash -d u=~/bin/u
 . ~u/helpers

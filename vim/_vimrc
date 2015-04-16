@@ -16,14 +16,6 @@ set listchars=tab:>-
 nnoremap ,l :set list!<cr>
 " }}}
 
-func ZshWin()
-    enew|set buftype=nofile
-    imap     <buffer><cr> <esc><cr>
-    nnoremap <buffer><cr> Yp!!z<cr>
-    nnoremap <buffer>K  :Man <cfile><cr>
-endfunc
-nnoremap q! :call ZshWin()<cr>
-
 command -nargs=* Man enew|set buftype=nofile filetype=man
     \| silent 0r!man <args>
 
