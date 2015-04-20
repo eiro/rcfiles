@@ -103,5 +103,12 @@ ldapvi/_q () {
 udq () { f=ldap/filter/minify ldapvi/_q "$@" }
 
 
-#path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )
+# well... 9base could be a good idea at some point
+# but ENOTIME
+#
+#path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )  
 
+# accept local environments used from vim apps
+# for security reasons, DO NOT USE IT ON SERVERS  
+
+: .v/env(Ne:'[[ -e $REPLY ]] && . $REPLY ':)
