@@ -16,11 +16,15 @@ export DOKUWIKI_CLIENT_MACHINE=unistra
 export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
 setopt pathdirs
-path=( ~/bin ~/node_modules/*/bin(N) $path )
+path=( ~/bin ~/node_modules/*/bin(N) $path )  
+
 . uze/uze
 . uze/eiro/env/more
 . uze/eiro/env/homebrew
 . uze/unistra/annuaire
+
+# PIP installed!
+path=( ~/.local/bin(N) $path ) 
 
 export LOCAL_DEBIAN_REPO=~/www/packages/rt
 
