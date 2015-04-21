@@ -115,4 +115,6 @@ udq () { f=ldap/filter/minify ldapvi/_q "$@" }
 # accept local environments used from vim apps
 # for security reasons, DO NOT USE IT ON SERVERS  
 
-: .v/env(Ne:'[[ -e $REPLY ]] && . $REPLY ':)
+: .v/env(Ne:'[[ -e $REPLY ]] && . $REPLY ':) 
+
+lq () { m4 ldapquery - }
