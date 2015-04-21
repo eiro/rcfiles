@@ -134,6 +134,7 @@ au BufRead psql.edit* setf sql
 
 au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dicts/'.&ft.'/*'
 au BufNewFile,BufRead Vagrantfile setf ruby
+au FilterWritePre * if &diff | colorscheme mydiff | endif
 " }}}
 " lovely long parentheses indent in C too :)
 set cino=(s,m1
@@ -194,7 +195,7 @@ endfun
 nnoremap ,m :let @/='X'<cr><c-w><c-n>:setf mail<cr>:0r~/.vim/mutt_drafts/
 
 com!  -complete=filetype -nargs=1 Sp wincmd n | setf <args>
-com!  -nargs=0 T e ~/todo/today
+com!  -nargs=0 VT e ~/todo/today
 
 set colorcolumn=80 
 
