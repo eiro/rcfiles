@@ -119,6 +119,8 @@ udq () { f=ldap/filter/minify ldapvi/_q "$@" }
 
 lq () { m4 ldapquery - }
 
+gfv () { xargs -n1 perl ~p5/get-flash-videos/bin/get_flash_videos } 
+
 js/minify () {
     perl -MLWP::Simple -MJavaScript::Minifier=minify -wE'
         print minify input => get shift
