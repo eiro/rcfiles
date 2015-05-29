@@ -16,7 +16,7 @@ export DOKUWIKI_CLIENT_MACHINE=unistra
 export VIM_SCRATCHPAD_ROOT=~/local/var/scratchpad
 
 setopt pathdirs
-path=( ~/bin ~/node_modules/*/bin(N) $path )  
+path=( ~/bin ~/node_modules/*/bin(N) $path )
 
 . uze/uze
 . uze/eiro/env/more
@@ -24,7 +24,7 @@ path=( ~/bin ~/node_modules/*/bin(N) $path )
 . uze/unistra/annuaire
 
 # PIP installed!
-path=( ~/.local/bin(N) $path ) 
+path=( ~/.local/bin(N) $path )
 
 export LOCAL_DEBIAN_REPO=~/www/packages/rt
 
@@ -131,3 +131,5 @@ js/minify- () {
     perl -MJavaScript::Minifier=minify -0 -nwE'print minify input => $_'
 }
 
+uzu eiro/env/more
+e() { date -f- +'REM %A %Y-%m-%d AT %R DURATION x MSG x' }
