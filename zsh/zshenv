@@ -133,3 +133,24 @@ js/minify- () {
 
 uzu eiro/env/more
 e() { date -f- +'REM %A %Y-%m-%d AT %R DURATION x MSG x' }
+
+# read the RT tickets from mutt 
+# adding the line 
+#    macro index,pager ,t '|zsh -c mutt/-edit/rttk|vim -<enter>'
+# in your .muttrc, you can now open a ticket from the pager and the index 
+# by typing ,t
+
+# mex is for "mail extraction"
+# rttk is of RT Ticket 
+
+mex/rttk/id () {
+    perl -nE'
+        /^Subject:.*?(\d+)/
+            and exit print $1
+    '
+}
+
+mutt/-edit/rttk () {
+    rt show $( mex/rttk/id )
+}
+
