@@ -1,6 +1,6 @@
 
 func ZshWin()
-    enew|set buftype=nofile
+    enew|set bt=nofile ft=zsh|file Zshell
     imap     <buffer><cr> <esc><cr>
     nnoremap <buffer><cr> Yp!!z<cr>
     nnoremap <buffer>K  :Man <cfile><cr>
