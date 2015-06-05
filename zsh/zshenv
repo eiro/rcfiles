@@ -154,3 +154,11 @@ mutt/-edit/rttk () {
     rt show $( mex/rttk/id )
 }
 
+# helpers for plfarm tests
+r   () { sudo -iu rt4 "$@" }
+rz  () { r zsh }
+rti () {
+    rz <<< 'rm -rf  ~/* ~/.*'
+    rz
+}
+
