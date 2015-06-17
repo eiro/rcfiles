@@ -1,0 +1,3 @@
+script load cap_sasl.pl
+script load logmetender.pl
+script load vim_mode.pl
