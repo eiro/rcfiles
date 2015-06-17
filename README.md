@@ -1,26 +1,17 @@
 # my rc files
 
-those are the files from my ~/local/etc i can share with you. ask me for other stuff (mutt, mbsync, ...)
+those are some files of my daily setup. lovely home made since the last millenium.
 
-just symlink to install most files.
+the way i use this repo is
 
-```
-ln -s $PWD/zsh/zshenv ~/.zshenv 
-ln -s $PWD/zsh/zshrc ~/.zshrc 
-ln -s $PWD/haskeline ~/.haskeline
-# and so on ...
-```
+* clone it into `~/local/etc`
+* install symlinks in the right files, like 
 
-vim is particular as it uses vundle:
+    ln -s $PWD/zsh/zshenv ~/.zshenv 
+    ln -s $PWD/zsh/zshrc ~/.zshrc 
+    ln -s $PWD/haskeline ~/.haskeline
+    # and so on ...
 
-```
-cd vim
-ln -s $PWD/_vimrc ~/.vimrc
-ln -s $PWD/vimfiles ~/.vim
-cd !$
-git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-vim +BundleInstall +qall
-```
-
-
-
+from time to time, move some files in separated repos as i want to share them 
+using [vim pathogen](https://github.com/tpope/vim-pathogen)
+or [zsh uze](https://github.com/eiro/uze).
