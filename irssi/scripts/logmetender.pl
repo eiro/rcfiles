@@ -23,7 +23,6 @@ you must clean the log by yourself (daily cron job?)
 
 =cut
 
-
 sub _log { 
 
     state $fh = do {
@@ -36,7 +35,13 @@ sub _log {
 } 
 
 Irssi::signal_add "message public"
-, sub ( $srv, $msg, $nick, $address, $target ) { 
+, sub ( $srv, $msg, $nick, $address, $target ) {
+    return unless $msg =~ /
+        eiro
+        | zsh
+        | perl
+    /xi;
+
     _log join "\t"
     , $nick
     , $$srv{chatnet}
