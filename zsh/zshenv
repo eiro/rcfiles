@@ -168,7 +168,6 @@ l () { print -l "$@" }
 # r  : rename
 alias ttmr='tmux rename-session'
 
-
 : <<'=cut'
 
 =head1 spm/pendings
