@@ -21,6 +21,18 @@ you must clean the log by yourself (daily cron job?)
 
     ssh shells.example.com ':>/tmp/irssi.notify'
 
+=head1 Installation 
+
+from your shell
+
+    cpanm Eirotic
+    cp logmetender.pl ~/.irssi/scripts
+    echo 'script load logmetender' >> ~/.irssi/startup
+
+from irssi
+
+    /script load logmetender
+
 =cut
 
 sub _log { 
