@@ -86,12 +86,13 @@ path=( $vim_extra_path $path )
 . uze/eiro/blog
 bloge () {eiro/blog/entry "$@"}
 
-netrw/vil () {
-    local list=$1
-    [[ - == $1 ]] && read list
-    list=${list/-(owner|request)@/@}
-    print e scp://s/$( sz s <<< "sympa/list/path $list" )/config
+netrw/sympa- () {
+    local srv=${1?ssh server hosting sympa}
+    sed 's#^#sympa/list/path #' | sz $srv |
+        sed "s#.*#scp://$srv/&/config#"
 }
+
+netrw/sympa () { netrw/sympa- $1 <<< ${2?sympa/list/path compliant list} }
 
 alias z=zsh
 
