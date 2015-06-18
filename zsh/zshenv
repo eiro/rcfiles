@@ -60,7 +60,7 @@ function () {
     for f { mailpath+=( "$f?new $f:t mail" ) }
 }   ~/local/mail/*(N/)
 
-5 () { perl -E "$@" }
+5 () { perl -wsCSDE "$@" }
 
 # add to prompt
 has_cabal_sandbox () {
