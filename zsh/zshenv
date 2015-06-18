@@ -164,7 +164,7 @@ rti () {
 
 l () { print -l "$@" }
 
-# ttm: this tmux session 
+# ttm: this tmux session
 # r  : rename
 alias ttmr='tmux rename-session'
 
