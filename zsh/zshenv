@@ -204,3 +204,14 @@ test-suite/spm () {
 5   () { perl -CSD -MEnv "$@" }
 5we () { 5 -wE "$@" }
 
+win () {
+    # what is next ? 
+    g s | awk '
+        !/^ M po/ &&
+        !/^[?][?]/
+    '
+}
+
+# sympa like it 
+perl5lib+=src/lib
+
