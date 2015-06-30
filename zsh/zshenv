@@ -141,15 +141,15 @@ e() { date -f- +'REM %A %Y-%m-%d AT %R DURATION x MSG x' }
 # mex is for "mail extraction"
 # rttk is of RT Ticket 
 
-mex/rttk/id () {
-    perl -nE'
-        /^Subject:.*?(\d+)/
-            and exit print $1
-    '
-}
+mex/rttk/id () { perl -nE'
+    exit print $1 if /^Subject:.*?#(\d+)/;
+' }
 
 mutt/-edit/rttk () {
     rt show $( mex/rttk/id )
+    test -n $REPLY &&
+        rt show $REPLY ||
+        print "no ticket found"
 }
 
 # helpers for plfarm tests
