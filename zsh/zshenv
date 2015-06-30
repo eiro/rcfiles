@@ -60,8 +60,6 @@ function () {
     for f { mailpath+=( "$f?new $f:t mail" ) }
 }   ~/local/mail/*(N/)
 
-5 () { perl -wsCSDE "$@" }
-
 # add to prompt
 has_cabal_sandbox () {
     local f
@@ -202,3 +200,7 @@ test-suite/spm () {
 
     $is "$got" "$expected" "change top level list"
 }
+
+5   () { perl -CSD -MEnv "$@" }
+5we () { 5 -wE "$@" }
+
