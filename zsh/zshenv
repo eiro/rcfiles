@@ -201,8 +201,17 @@ test-suite/spm () {
     $is "$got" "$expected" "change top level list"
 }
 
-5   () { perl -CSD -MEnv "$@" }
-5we () { 5 -wE "$@" }
+5    () { perl -CSD -MEnv "$@" }
+5we  () { 5 -wE "$@" }
+5wen () { 5 -ln "$@" }
+5wep () { 5 -lp "$@" }
+
+# used by mutt macros for spm
+mex/words () {
+    5wen 'if ( /^$/../^-- / ) {
+        map say, split /\s+/
+    }'
+}
 
 win () {
     # what is next ? 
@@ -214,4 +223,3 @@ win () {
 
 # sympa like it 
 perl5lib+=src/lib
-
