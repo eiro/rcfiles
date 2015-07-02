@@ -1,21 +1,5 @@
-" A Scratchpad is a file is a persistant file where you can take notes and
-" experiment things.
-
-" Scratchpads are stored in a $VIM_SCRATCHPAD_ROOT directory
-" (the default is ~/.vim-scratchpad) and not deleted when you leave your
-" session so you'll come back to your tips later 
-
-
-" :Scratchpad [filetype]
+" want moar ? so type :h scratchpad
 "
-" opens a Scratchpad named after this filetype and setf this filetype.
-"
-" by default, the filetype of the current buffer is used. so when you are  
-" editing an SQL script, those 2 commands have the same effect
-"
-"     :Scratchpad 
-"     :Scratchpad sql
-
 fun! Scratchpad(...)
 
     if !exists('$VIM_SCRATCHPAD_ROOT')
@@ -33,7 +17,8 @@ fun! Scratchpad(...)
     " would be smarter as you can reopen the scratchpad manually 
     
     exec "setf ".ft
-endf 
+endf
+
 command -nargs=* -complete=filetype Scratchpad call Scratchpad(<f-args>)
 
 
