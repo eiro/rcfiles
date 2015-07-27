@@ -1,3 +1,3 @@
-set dict+=~/.vim/dicts/javascript/ecma
-set dict+=~/.vim/dicts/javascript/reserved
-set dict+=~/.vim/dicts/javascript/jquery
+set dict+=~/.vim/dict/javascript/ecma
+set dict+=~/.vim/dict/javascript/reserved
+set dict+=~/.vim/dict/javascript/jquery

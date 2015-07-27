@@ -1,2 +1,2 @@
 set isk+=:
-set dict+=~/.vim/dicts/xsl
+set dict+=~/.vim/dict/xsl
