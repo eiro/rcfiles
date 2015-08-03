@@ -1,11 +1,10 @@
-if exists('*RTTicket') |fini |endif
-
 " complete adresses from aliases files
 set dict+=~/.mutt/aliases/*
 " add @, - and . to complete email adresses
 set isk+=.,@-@,---
 nnoremap <buffer> ,x :w !mutt -H -<cr>
 
+if exists('*RTTicket') |fini |endif
 func RTTicket ()
     %g#\v^Subject:.{-}(\d+)](.*)#y a
     enew
