@@ -11,3 +11,40 @@ inoremap \D \begin{description}<cr>\item<cr>\end{description}<esc>kA
 inoremap \P \pause
 inoremap \TR \textcolor{red}
 inoremap \T<R \textcolor<>{red}<c-o>F>
+
+fun ListStartWith(prefix,list)
+return filter(a:list,'stridx(v:val,a:prefix) == 0')
+endf
+
+func RtpLinesOf(path)
+return readfile(findfile(a:path,&rtp))
+endf
+
+func RtpCompletionFile(A,file)
+return ListStartWith(a:A,RtpLinesOf(a:file))
+endf
+
+func DictCompleterCode(file)
+let l:name = substitute(a:file,'\v(^|/)(.)','\U\2','g')
+exe 'func Completion'.l:name."(A,L,P)\n"
+\.  "return RtpCompletionFile(a:A,'".a:file."')\n"
+\.  "endf"
+endf
+
+com! -nargs=1 RtpCompleter call DictCompleterCode(<f-args>) 
+
+RtpCompleter dict/tex/env
+RtpCompleter dict/tex/use
+
+com! -complete=customlist,CompletionDictTexEnv -nargs=1 TexEnv
+\| exe "norm! i"
+\. "\\begin{<args>}\n\n"
+\. "\\end{<args>}\n"
+\| sil -2 | start
+
+com! -complete=customlist,CompletionDictTexUse -nargs=1 TexUse
+\| exe "norm! i\\usepackage{<args>}"
+\| start
+
+inoremap \beg <c-o>:TexEnv<space>
+inoremap \use <c-o>:TexUse<space>

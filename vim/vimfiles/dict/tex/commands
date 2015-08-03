@@ -1,0 +1,10 @@
+\documentclass
+\usepackage
+\begin
+\author
+\and
+\date
+\title
+\maketitle
+\frametitle
+\framesubtitle
