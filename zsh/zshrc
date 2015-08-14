@@ -31,3 +31,9 @@ compdef _man superman
 alias vt='( cd ~/todo; vim today)'
 alias v=vim
 alias vz="vim '+call ZshWin()' +startinsert"
+
+spmc () {
+    print -l {,,,} |
+        cat ~/www/pendings.txt - ~/help |
+        vim - +'setf spmc'
+}
