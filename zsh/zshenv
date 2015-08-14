@@ -222,4 +222,8 @@ win () {
 }
 
 # sympa like it 
-perl5lib+=src/lib
+perl5lib+=src/lib  
+
+export PROOT=/tmp/promises
+mkdir -p $PROOT
+uzu promise
