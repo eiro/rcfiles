@@ -10,6 +10,10 @@ nnoremap <buffer> ,a :s/.../g add /
 \<bar>.!z
 \<cr>
 
-nnoremap <buffer> ,c :s/.../g co /
+nnoremap <buffer> ,co :s/.../g co /
+\<bar>.!z
+\<cr>
+
+nnoremap <buffer> ,ci :Scratchpad gitcommit
 \<bar>.!z
 \<cr>
