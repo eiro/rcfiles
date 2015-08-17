@@ -226,4 +226,27 @@ perl5lib+=src/lib
 
 export PROOT=/tmp/promises
 mkdir -p $PROOT
-uzu promise
+
+# TODO: was 'promise' overkill? 
+# minimalist one right there
+# uzu promise 
+
+promise/tmux/tailf () {
+    tmux split-window -d -p 20 \
+    'tail -f ${PROMOUT:=/tmp/promise.mix}'
+}
+
+# examples (only if alias p=promise/new):
+#    | p sort -u
+#    | p z
+#    | p sz s
+
+promise/new () {
+    { (( $+1 )) && "$@" || zsh
+    } &>> ${PROMOUT:=/tmp/promise.mix} &
+}
+
+alias p=promise/new
+
+# TODO: must be as a macro in tmux instead
+p/f () {promise/tmux/tailf}
