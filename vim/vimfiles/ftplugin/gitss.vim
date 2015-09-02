@@ -14,6 +14,4 @@ nnoremap <buffer> ,co :s/.../g co /
 \<bar>.!z
 \<cr>
 
-nnoremap <buffer> ,ci :Scratchpad gitcommit
-\<bar>.!z
-\<cr>
+nnoremap <buffer> ,ci :Scratchpad gitcommit<cr>
