@@ -95,29 +95,26 @@ netrw/sympa () { netrw/sympa- $1 <<< ${2?sympa/list/path compliant list} }
 alias z=zsh
 
 uzu ldap
-lfm () {ldap/filter/minify "$@"}
 
-ldapvi/_q () {
-    local query="$( ${f?use wrappers, you fool!} )"
-    ldapvi "$@" "$query" 
+l/q () {
+    : ${1:=-}
+    m4 ldapquery "$@" |
+    ldap/filter/minify
 }
 
-# udcrud: Unistra Directory CRUD ? ok ... i'm tired! 
-udq () { f=ldap/filter/minify ldapvi/_q "$@" }
+lq () { ldapvi "$( l/q "$@" )" }
+l/m () { ldapvi --ldapmodify }
 
-
+# udcrud: Unistra Directory CRUD ? ok ... i'm tired!
+#udq () { f=ldap/filter/minify ldapvi/_q "$@" }
 # well... 9base could be a good idea at some point
 # but ENOTIME
-#
-#path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )  
-
+#path=( $( shush2 dpkg -L 9base | grep '/bin$' ) $path )
 # accept local environments used from vim apps
 # for security reasons, DO NOT USE IT ON SERVERS
-for REPLY (.v/env(N)) . $REPLY
+# for REPLY (.v/env(N)) . $REPLY
 
-lq () { m4 ldapquery - }
-
-gfv () { xargs -n1 perl ~p5/get-flash-videos/bin/get_flash_videos } 
+gfv () { xargs -n1 perl ~p5/get-flash-videos/bin/get_flash_videos }
 
 js/minify () {
     perl -MLWP::Simple -MJavaScript::Minifier=minify -wE'
@@ -132,14 +129,14 @@ js/minify- () {
 uzu eiro/env/more
 e() { date -f- +'REM %A %Y-%m-%d AT %R DURATION x MSG x' }
 
-# read the RT tickets from mutt 
-# adding the line 
+# read the RT tickets from mutt
+# adding the line
 #    macro index,pager ,t '|zsh -c mutt/-edit/rttk|vim -<enter>'
-# in your .muttrc, you can now open a ticket from the pager and the index 
+# in your .muttrc, you can now open a ticket from the pager and the index
 # by typing ,t
 
 # mex is for "mail extraction"
-# rttk is of RT Ticket 
+# rttk is of RT Ticket
 
 mex/rttk/id () { perl -nE'
     exit print $1 if /^Subject:.*?#(\d+)/;
@@ -158,9 +155,11 @@ rz  () { r zsh }
 rti () {
     rz <<< 'rm -rf  ~/* ~/.*'
     rz
-} 
+}
 
-l () { print -l "$@" }
+l  () { print -l "$@" }
+# lg () { print -l "$~@(N)" }
+
 
 # ttm: this tmux session
 # r  : rename
@@ -170,22 +169,22 @@ alias ttmr='tmux rename-session'
 
 =head1 spm/pendings
 
-pendings list the current list of pending validations. 
+pendings list the current list of pending validations.
 
 =head1 spm/prefix/change
 
-for a spm/pendings as input, generate a pending 
+for a spm/pendings as input, generate a pending
 
 =cut
 
-spm/pendings () { curl -sL ramirez.u-strasbg.fr/pendings.txt } 
+spm/pendings () { curl -sL ramirez.u-strasbg.fr/pendings.txt }
 
 spm/prefix/change () {
     local from=${1?old prefix} to=${2?new prefix}
     while {read cmd list owner} {
-        [[ $list == $from(-*)# ]] && 
+        [[ $list == $from(-*)# ]] &&
             print sympa/list/mv $list $to${list#$from}
-    } 
+    }
 }
 
 test-suite/spm () {
@@ -193,7 +192,7 @@ test-suite/spm () {
 
     got=$( spm/prefix/change old new <<< "clueless old-truc@example.com" )
     expected="sympa/list/path old-truc@example.com new-truc@example.com"
-    $is "$got" "$expected" "change a prefixed list" 
+    $is "$got" "$expected" "change a prefixed list"
 
     got=$( spm/prefix/change old new <<< "clueless old@example.com" )
     expected="sympa/list/path old-truc@example.com new@example.com"
@@ -201,10 +200,12 @@ test-suite/spm () {
     $is "$got" "$expected" "change top level list"
 }
 
-5    () { perl -CSD -MEnv "$@" }
-5we  () { 5 -wE "$@" }
-5wen () { 5 -ln "$@" }
-5wep () { 5 -lp "$@" }
+5     () { perl -CSD -MEnv "$@" }
+5we   () { 5 -wE   "$@" }
+5wen  () { 5 -lnE  "$@" }
+5wep  () { 5 -lpE  "$@" }
+5wan  () { 5 -lnF  "$@" }
+5wap  () { 5 -lpF  "$@" }
 
 # used by mutt macros for spm
 mex/words () {
@@ -214,26 +215,25 @@ mex/words () {
 }
 
 win () {
-    # what is next ? 
+    # what is next ?
     g s | awk '
         !/^ M po/ &&
         !/^[?][?]/
     '
 }
 
-# sympa like it 
-perl5lib+=src/lib  
+# sympa like it
+perl5lib+=src/lib
 
 export PROOT=/tmp/promises
 mkdir -p $PROOT
 
-# TODO: was 'promise' overkill? 
+# TODO: was 'promise' overkill?
 # minimalist one right there
-# uzu promise 
+# uzu promise
 
-promise/tmux/tailf () {
-    tmux split-window -d -p 20 \
-    'tail -f ${PROMOUT:=/tmp/promise.mix}'
+promise/tmux/tailf/open () {
+    tmux split-window -d  -p 20 'tail -f ${PROMOUT:=/tmp/promise.mix}'
 }
 
 # examples (only if alias p=promise/new):
@@ -249,4 +249,15 @@ promise/new () {
 alias p=promise/new
 
 # TODO: must be as a macro in tmux instead
-p/f () {promise/tmux/tailf}
+p/o () {promise/tmux/tailf/open}
+p/c () {promise/tmux/tailf/close}
+
+uzu sympa
+
+tapprouve () {
+    # tapprouve t/*.tap > t.html
+    prove -m -Q \
+    --formatter=TAP::Formatter::HTML \
+    --source File "$@"
+}
+
