@@ -195,7 +195,7 @@ endfun
 nnoremap ,m :let @/='X'<cr><c-w><c-n>:setf mail<cr>:0r~/.vim/mutt_drafts/
 
 com!  -complete=filetype -nargs=1 Sp wincmd n | setf <args>
-com!  -nargs=0 VT e ~/todo/today
+com!  -nargs=0 VT lcd ~/todo |e today
 
 set colorcolumn=80
 
