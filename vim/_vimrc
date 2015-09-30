@@ -140,7 +140,7 @@ au FilterWritePre * if &diff | colorscheme mydiff | endif
 set cino=(s,m1
 
 function FoldParagraph ()
-    " pomp� de :h foldexp
+    " pompé de :h foldexp
     return getline(v:lnum)=~'^\s*$'&&getline(v:lnum+1)=~'\S'?'<1':1
 endfunction
 
@@ -157,8 +157,6 @@ fu! NewFoldWhenLineMatches( lineMatches )
 
   return '='
 endfu
-
-iab cdlt, cordialement,
 
 fun! NewFilter ( alias, filter )
     " filter inplace (f as in filter)
@@ -213,3 +211,7 @@ func! Promise () range
 endf
 
 vnoremap ,p :call Promise()<cr>
+
+iab cdlt, cordialement,
+iab bjr Bonjour,
+iab pb problème
