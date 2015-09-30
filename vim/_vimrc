@@ -215,3 +215,16 @@ vnoremap ,p :call Promise()<cr>
 iab cdlt, cordialement,
 iab bjr Bonjour,
 iab pb problème
+
+" you can redir and eval in a register (see examples)
+"    redir @p|silent digraphs|redir END|put p
+"    redir @p|silent ls|redir END|put p
+" but i wanted it the pipe way so here is the Viml filter
+
+command -range So
+    \  <line1>,<line2>w! /tmp/Viml.vim
+    \| redir! > /tmp/Viml.out
+    \| silent source /tmp/Viml.vim
+    \| redir END
+    \| <line1>r /tmp/Viml.out
+
