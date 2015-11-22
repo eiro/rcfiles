@@ -6,36 +6,9 @@ set nocp
 set rtp+=~/.vim/pathogen
 call pathogen#infect()
 
-" recommended by cmd_mp.vim {{{
 set aw
 nnoremap ,x :make<cr>
-" }}}
-" i guess it was about python ? {{{
-set et
-set listchars=tab:>-
-nnoremap ,l :set list!<cr>
-" }}}
 
-command -nargs=* Man enew|set buftype=nofile filetype=man
-    \| silent 0r!man <args>
-
-command -nargs=* Perldoc enew|set buftype=nofile filetype=man
-    \| silent 0r!perldoc -t <args> || perldoc -t -f <args>
-
-" recent/experimental additions {{{
-
-" pour les buffermenues
-
-" hi CursorLine ctermfg=white ctermbg=red
-
-" nnoremap ,K :exec 'Man '.expand('<cfile>')<cr>
-" shell programming
-" set isfname-==
-" command -nargs=* SyntaxIdEcho echo synIDattr(synID(line("."), col("."), 1), "name")
-" command -nargs=* GIT echo system('git '.<q-args>)
-
-" }}}
-" General settings {{{
 " :h 'lz' for help on lz
 " and so on ...
 " as summary, my vim is
@@ -69,121 +42,9 @@ syn on
 filetype on
 filetype indent plugin on
 
-if has("digraphs")
-    digraphs .3 8230
-endif
-
-" :Tohtml use CSS
-let html_use_css='yes'
-" }}}
-" GUI and windows settings {{{
-" TODO: search and destroy ?
-let g:WINDOWSVERSION = 0
-for windowsversion in [ 'win16' , 'win32' , 'win64' , 'win95' , 'win32unix' ]
-	if has(windowsversion)
-		let g:WINDOWSVERSION = windowsversion
-		break
-	endif
-endfor
-if g:WINDOWSVERSION
-  " alt keys are also used by vim
-  set wak=yes
-  map <silent> <m-space> <esc>c>:simalt ~<cr>>
-else
-  run ftplugin/man.vim
-  set wak=no
-endif
-if has("gui_running")
-  set go=agrLt
-  colorscheme elflord
-  " colorscheme darkblue
-  " go=MAac seems to be good on windows
-  if has("gui_win32")
-      set guifont=Lucida_Console:h10:cANSI
-  else
-      set guifont=Monospace\ 13
-  endif
-else
-  " elflord and evening are cool too !
-  " colorscheme ron
-  " colorscheme darkblue
-  " set background=light
-endif
-" }}}
-" programmers {{{
-let mapleader=','
-" }}}
-" personnal filetypes {{{
-au BufNewFile *.xsl 0r~/.vim/templates/xsl.xsl
-au BufNewFile *.pl,*.t 0r~/.vim/templates/perl.pl | norm G
-au BufNewFile *.pm 0r~/.vim/templates/perl.pm
-au BufRead slapd.conf setf slapd
-au BufRead *.go setf go
-au BufRead *.psgi setf perl
-au BufRead *.ferm,*ferm.conf setf ferm
-au BufNewFile,BufRead */itsalltext/wiki.* setf dokuwiki
-
-au BufNewFile,BufRead *mutt/* if ! &ft | set ft=muttrc | endif
-au BufNewFile,BufRead *.tt2.*,tt2.*,*.tt2 runtime macros/tt2.vim
-au BufNewFile,BufRead *.tt2html
-			\ set ft=html |
-			\ runtime macros/tt2.vim
-au BufNewFile *.html 0r ~/.vim/templates/html5.html
-
-au BufRead psql.edit* setf sql
-
-au BufNewFile,BufRead * exec 'setlocal dict+=~/.vim/dicts/'.&ft.'/*'
-au BufNewFile,BufRead Vagrantfile setf ruby
-au FilterWritePre * if &diff | colorscheme mydiff | endif
-" }}}
 " lovely long parentheses indent in C too :)
 set cino=(s,m1
 
-function FoldParagraph ()
-    " pompé de :h foldexp
-    return getline(v:lnum)=~'^\s*$'&&getline(v:lnum+1)=~'\S'?'<1':1
-endfunction
-
-fu! NewFoldWhenLineMatches( lineMatches )
-  if getline( v:lnum ) =~ '\v^\s*(#|$)'
-    return '='
-  endif
-
-  if getline( v:lnum ) =~ a:lineMatches
-    return 'a1'
-  elseif getline( v:lnum + 1 ) =~ a:lineMatches
-    return 's1'
-  endif
-
-  return '='
-endfu
-
-fun! NewFilter ( alias, filter )
-    " filter inplace (f as in filter)
-    exec "nmap ,f" . a:alias . "  :%!". a:filter . "<cr>"
-    exec "vm   ,f" . a:alias . "  :!" . a:filter . "<cr>"
-    " new window (w as in window)
-    exec "nmap ,w" . a:alias . "  %y<c-w>np,f"  . a:alias . ""
-    exec "vm   ,w" . a:alias . "  y<c-w>np,f" . a:alias . ""
-    " copy and filter (s like show)
-    exec "vm   ,s" . a:alias . "  yPgv,f" . a:alias . ""
-endf
-
-" all the file or the visual selection can be piped to
-" which means (see NewFilter):
-" ,wz open a new window with the result of a zsh filtering
-call NewFilter('z','zsh')
-call NewFilter('5','perl')
-call NewFilter('6','perl6')
-call NewFilter('t','textile')
-
-" echo map(['j','s','n','l','qu'],"\"inoremap v:val ' v:val <c-k>'9")
-" inoremap j' j<c-k>'9
-" inoremap s' s<c-k>'9
-" inoremap n' n<c-k>'9
-" inoremap s' s<c-k>'9
-" inoremap l' l<c-k>'9
-" inoremap qu' qu<c-k>'9
 
 com -complete=custom,ListUsers -nargs=1 Shoot :wincmd new|<args>
 fun ListUsers(A,L,P)
@@ -197,30 +58,5 @@ com!  -nargs=0 VT lcd ~/todo |e today
 
 set colorcolumn=80
 
-nnoremap ,ff :enew<cr>:set buftype=nofile<cr>:silent 0r!find * -type f<cr>
-
-let g:ctrlp_map = '<c-x><c-p>'
-
 " i said: i *WANT* to edit this file!
 nnoremap ,gf :echo system("mkdir -p ".expand('<cfile>:h'))<cr>:e <cfile><cr>
-
-func! Promise () range
-    execute (a:firstline) . "," . a:lastline . '!promise/mix -'
-    let g:promise=getline(a:firstline)
-    call VimuxRunCommand("tail -f ".g:promise."/out")
-endf
-
-vnoremap ,p :call Promise()<cr>
-
-iab cdlt, cordialement,
-iab bjr Bonjour,
-iab pb problème
-iab phone? Souhaitez-vous être contacté par téléphone pour clarifier ensemble les différentes solutions?
-
-command -range So
-    \  <line1>,<line2>w! /tmp/Viml.vim
-    \| redir! > /tmp/Viml.out
-    \| silent source /tmp/Viml.vim
-    \| redir END
-    \| <line1>r /tmp/Viml.out
-
