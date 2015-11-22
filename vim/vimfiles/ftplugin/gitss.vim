@@ -1,17 +1,15 @@
-nnoremap <buffer> ,d :y
-\<bar>enew
-\<bar>setf diff
-\<bar>put!
-\<bar>s/.../g diff /
-\<bar>.!z
-\<cr>
+command -buffer Diff y |enew |setf diff |put! |s/.../g diff / |.!z
 
-nnoremap <buffer> ,a :s/.../g add /
-\<bar>.!z
-\<cr>
+func Git(cmd,from,to)
+    exec a:from. ','. a:to. 's#...#g '. a:cmd. ' #'
+    exec a:from. ','. a:to. '!z'
+endf
 
-nnoremap <buffer> ,co :s/.../g co /
-\<bar>.!z
-\<cr>
+command! -buffer -range Add call Git('add',<line1>,<line2>)
+command! -buffer -range CheckOut call Git('co',<line1>,<line2>)
 
+nnoremap <buffer> ,d :Diff<cr>
+nnoremap <buffer> ,a :Add<cr>
+nnoremap <buffer> ,co :CheckOut<cr>
 nnoremap <buffer> ,ci :Scratchpad gitcommit<cr>
+
