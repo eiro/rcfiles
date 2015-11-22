@@ -1,0 +1,24 @@
+From: Marc Chantreux <mc@unistra.fr>
+To: rt@rt.unistra.fr
+
+Bonjour,
+
+j'ai tenté de vous contacter sans succès par téléphone le
+
+    esyscmd(date +"%F")
+
+Je renouvellerais ma tentative le 
+
+    date -d1d +"    %F matin"
+    date -d1d +"    %F après-midi"
+
+Vous pouvez précéder mon appel en me contactant http://annuaire.unistra.fr/p/20200
+
+cordialement,
+-- 
+Support de la Direction Informatique
+Université de Strasbourg 
+14 Rue René Descartes,
+67084  STRASBOURG CEDEX
+☎: 03.68.85.43.21
+http://unistra.fr
