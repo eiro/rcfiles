@@ -14,7 +14,8 @@ fun! BufPick(pre,post)
     if !exists('g:BufPickCtx') | let g:BufPickCtx  = [] | endif
     call add( g:BufPickCtx, { "pos": getpos('.'), "post": a:post } )
     new
-    set bt=nofile cursorline
+    set bt=nofile cul
+    hi CursorLine ctermfg=white ctermbg=blue
     exec "nnoremap <buffer> <cr> :call BufPickClose()<cr>"
     exec a:pre
 endf
