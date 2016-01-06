@@ -1,12 +1,5 @@
 setopt autopushd    # so cd <tab> will be magic
 
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*' group-name ''
-
 # '^[' or \e is escape key
 # \ea is used to avoid recursive mappings
 
@@ -51,9 +44,10 @@ autoload -U zed
 
 # following http://www.linux-mag.com/id/1106/ tutorial
 # found with (http://www.bash2zsh.com/)
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*' group-name ''
 
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:warnings' format 'No matches for: %d'
