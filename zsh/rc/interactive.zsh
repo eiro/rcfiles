@@ -13,31 +13,24 @@ zstyle ':completion:*' group-name ''
 # vi mode
 bindkey -v
 
-# khatar's vi mapping
-# bindkey -s '((' '()\ei'
-# bindkey -s '( (' '(   )\ehhi'
-# bindkey -s '(((' '(\ea(   ))\ehhhi'
-# bindkey -s '{{' '{}\ei'
-# bindkey -s '{ {' '{  }\ehi'
-# bindkey -s '{{{' '{\ea{   }}\ehhhi'
-# bindkey -s '[[' '[]\ei'
-# bindkey -s '[ [' '[   ]\ehhi'
-# bindkey -s '[[[' '[\ea[   ]]\ehhhi'
-# bindkey -s '[-' '[\ea[ -  ]]\ehhhi'
-# bindkey -s "''" "'\ea'\ei"
-# bindkey -s '""' '"\ea"\ei'
-# bindkey -s '(F' 'for x ()\ei'
-# bindkey -s '{w' 'while {} {}\e4ha'
+# make zsh work like vim's
+# https://github.com/eiro/rcfiles/blob/master/vim/vimfiles/plugin/parentheses.vim
 
-# khatar's vi mapping
-bindkey -s '(' '^v()\ei'
-bindkey -s '{' '^v{}\ei'
-bindkey -s '[' '^v[]\ei'
-bindkey -s "'" "^v'^v'\ei"
-bindkey -s '"' '^v"^v"\ei'
-bindkey -s '(F' 'for x ('
-bindkey -s '{w' 'while ^v{} ^v{}\e4ha'
- 
+bindkey -s '((' '()\ei'
+bindkey -s '( (' '(   )\ehhi'
+bindkey -s '(((' '(\ea(   ))\ehhhi'
+bindkey -s '{{' '{}\ei'
+bindkey -s '{ {' '{  }\ehi'
+bindkey -s '{{{' '{\ea{   }}\ehhhi'
+bindkey -s '[[' '[]\ei'
+bindkey -s '[ [' '[   ]\ehhi'
+bindkey -s '[[[' '[\ea[   ]]\ehhhi'
+bindkey -s '[-' '[\ea[ -  ]]\ehhhi'
+bindkey -s "''" "'\ea'\ei"
+bindkey -s '""' '"\ea"\ei'
+bindkey -s '(f' 'for it ()\ei'
+bindkey -s '{w' 'while {} {}\e4ha'
+
 # get lost ? RTFM!
 autoload run-help
 bindkey -a '\eh' run-help
