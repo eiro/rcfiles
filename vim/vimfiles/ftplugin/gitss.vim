@@ -1,4 +1,5 @@
-command -buffer Diff y |enew |setf diff |put! |s/.../g diff / |.!z
+command -buffer Diff y |enew |setf diff |put! |s/... */g diff / |.!z
+command -buffer Refresh %!g s
 
 func Git(cmd,from,to)
     exec a:from. ','. a:to. 's#...#g '. a:cmd. ' #'
@@ -12,4 +13,3 @@ nnoremap <buffer> ,d :Diff<cr>
 nnoremap <buffer> ,a :Add<cr>
 nnoremap <buffer> ,co :CheckOut<cr>
 nnoremap <buffer> ,ci :Scratchpad gitcommit<cr>
-
