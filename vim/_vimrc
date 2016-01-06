@@ -60,3 +60,9 @@ set colorcolumn=80
 
 " i said: i *WANT* to edit this file!
 nnoremap ,gf :echo system("mkdir -p ".expand('<cfile>:h'))<cr>:e <cfile><cr>
+
+" on my laptop, the <esc> key passed away... so i need a hack
+
+map! ² <esc>
+imap ² <esc>
+
