@@ -1,11 +1,11 @@
 " BufPick: use buffers as menu 
 fun! BufPickClose()
     exec g:BufPickCtx[-1]["post"]
-    let x=@p
+    let s:x=@p
     let @p=getline('.')
     bd!
     normal "pp
-    call setreg('p',x)
+    call setreg('p',s:x)
     call cursor(g:BufPickCtx[-1]["pos"])
     call remove(g:BufPickCtx,-1)
 endf 
