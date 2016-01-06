@@ -66,3 +66,7 @@ nnoremap ,gf :echo system("mkdir -p ".expand('<cfile>:h'))<cr>:e <cfile><cr>
 map! ² <esc>
 imap ² <esc>
 
+" try to avoid typing <cr> after commands
+" still need to investigate, type :h hit-<tab>
+set shm=at ch=3
+
