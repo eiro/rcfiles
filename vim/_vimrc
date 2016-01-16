@@ -70,13 +70,13 @@ imap ² <esc>
 " still need to investigate, type :h hit-<tab>
 set shm=at ch=3
 
-" HeadDiff makes a vimdiff between the current version of a file and the one
+" DiffHead makes a vimdiff between the current version of a file and the one
 " commited in HEAD so you can split changes into atomic commits
 "
 " * edit % and save it with w|!g add %
 " * remove %~ after work
 
-command -bang HeadDiff w<bang> %~
+command -bang DiffHead w<bang> %~
     \| exec "%!g show HEAD:%"
     \| diffthis | vsplit %~ | diffthis
 
@@ -89,3 +89,24 @@ command! -range Display <line1>,<line2>!xargs luds by mail|luds/+ 'disp.*'
 " on editing ldap entries
 command LDAPeditor vsplit|lcd ~/ldapeditor
 " }}}
+
+" syntastic {{{
+
+" recommended configuration made by
+" https://github.com/scrooloose/syntastic#settings
+
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" 
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+" 
+" " my way
+" 
+" let g:syntastic_python_python_exec = '/usr/bin/python3'
+
+" }}}
+
