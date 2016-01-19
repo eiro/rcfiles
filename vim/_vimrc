@@ -2,7 +2,7 @@
 " because sometime you make mistakes:
 " set debug=msg
 
-set nocp
+set nowrap et nocp
 set rtp+=~/.vim/pathogen
 call pathogen#infect()
 
