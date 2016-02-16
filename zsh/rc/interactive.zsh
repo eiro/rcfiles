@@ -26,14 +26,33 @@ bindkey -s '{w' 'while {} {}\e4ha'
 
 # get lost ? RTFM!
 autoload run-help
-bindkey -a '\eh' run-help
 
 # edit commandline with your favorite ($FCEDIT)or
 autoload edit-command-line
 zle -N edit-command-line
-bindkey -a '\ev' edit-command-line
-bindkey -a '\ec' _complete_help
+
+# thune the vi normal mode {{{
+#
+# named vicmd in zle. bindkey -a to deal with it
+
+# remember: 
+# don't try to look like the readline because zle is richer:
+# steal from vim instead
+
+bindkey -a -r :
+bindkey -a q: execute-named-cmd
+bindkey -a :e edit-command-line
+bindkey -a :h run-help
+
+# }}}
+
+# emacs well known quick-wins
+bindkey '^A' beginning-of-line # also: learn ^ and I from vi
+bindkey '^E' end-of-line       # also: learn $ and A from vi
+
 bindkey '^R' history-incremental-search-backward
+# also learn from !? event and history|vim -
+
 
 compdef _gnu_generic ctags
 compdef _gnu_generic zenity
